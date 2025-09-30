@@ -3,6 +3,7 @@
     <File Path=".Exercises/PointsOfAttention.md" />
     <File Path=".Exercises/readme.md" />
   </Folder>
-  <Folder Name="/UI/" />
-  <Project Path="UI/ConsoleUi/ConsoleUi.csproj" />
+  <Folder Name="/UI/">
+    <Project Path="UI/ConsoleUi/ConsoleUi.csproj" />
+  </Folder>
 </Solution>
