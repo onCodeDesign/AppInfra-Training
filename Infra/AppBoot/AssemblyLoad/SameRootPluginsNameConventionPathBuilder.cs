@@ -61,3 +61,7 @@ internal class SameRootPluginsNameConventionPathBuilder(string hostAssemblyLocat
 		return plugin;
 	}
 }
+			plugin = plugin.Substring(lastSlash + 1);
+		return plugin;
+	}
+}
