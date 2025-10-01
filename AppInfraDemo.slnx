@@ -1,8 +1,13 @@
 <Solution>
   <Folder Name="/.Practice/">
-    <File Path=".Exercises/PointsOfAttention.md" />
-    <File Path=".Exercises/readme.md" />
+    <File Path=".Practice/PointsOfAttention.md" />
+    <File Path=".Practice/readme.md" />
   </Folder>
+  <Folder Name="/Infra/">
+    <Project Path="Infra/AppBoot.UnitTests/AppBoot.UnitTests.csproj" Id="e1b53974-4b95-4d1f-8a2a-78f5d75bcea4" />
+    <Project Path="Infra/AppBoot/AppBoot.csproj" Id="0e054565-0ea8-493f-9b57-3da760d2c87f" />
+  </Folder>
+  <Folder Name="/Modules/" />
   <Folder Name="/UI/">
     <Project Path="UI/ConsoleUi/ConsoleUi.csproj" />
   </Folder>
