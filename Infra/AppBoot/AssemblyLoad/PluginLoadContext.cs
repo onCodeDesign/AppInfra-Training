@@ -38,7 +38,7 @@ namespace AppBoot.AssemblyLoad
                         if (assName != null)
                         {
                             loadedAssemblies.Add(assName);
-                            Console.WriteLine($"Assembly: {assemblyName.Name}");
+                            //Console.WriteLine($"Assembly: {assemblyName.Name}");
                             return ass;
                         }
                     }

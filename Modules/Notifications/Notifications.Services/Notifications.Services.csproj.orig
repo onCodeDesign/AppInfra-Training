@@ -9,7 +9,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Infra\AppBoot\AppBoot.csproj">
+<<<<<<< HEAD
+     <Private>false</Private>
+=======
       <Private>false</Private>
+>>>>>>> 78263e8 (updates to notifications)
       <ExcludeAssets>runtime</ExcludeAssets>
     </ProjectReference>
     <ProjectReference Include="..\..\Contracts\Contracts.csproj">

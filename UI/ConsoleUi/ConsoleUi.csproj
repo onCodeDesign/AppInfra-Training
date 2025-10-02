@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infra\AppBoot\AppBoot.csproj" />
+    <ProjectReference Include="..\..\Modules\Contracts\Contracts.csproj" />
   </ItemGroup>
 
 </Project>
