@@ -1,0 +1,6 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e96a1fbe_002Df1ab_002D412d_002Da2c7_002Dbef83a8c0077/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetPluginFullPath_EntryAssemblyIsDeepAndPluginIsDeep_PathIsBuilt" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B5FA3BF8-3AEC-81FC-BC59-053550300A2F::net10.0::AppBoot.UnitTests.BreadcrumbNameConventionPathBuilderTests.GetPluginFullPath_EntryAssemblyIsDeepAndPluginIsDeep_PathIsBuilt&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
