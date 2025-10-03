@@ -22,7 +22,10 @@ Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 		options.BreadcrumbNameConventionPathBuilderPluginsDir = "Modules";
 		options.BreadcrumbNameConventionPathBuilderTopDirs = ["UI", "Modules", "Infra"];
 
-		options.AddPlugin("Notifications.Services");
+		options
+			.AddPlugin("Notifications.Services")
+			.AddPlugin("Sales.Services")
+			;
 
 	})
 	.AddRegistrationBehavior(new ServiceRegistrationBehavior())
