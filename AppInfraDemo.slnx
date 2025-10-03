@@ -13,9 +13,13 @@
   <Folder Name="/Modules/Notifications/">
     <Project Path="Modules/Notifications/Notifications.Services/Notifications.Services.csproj" Id="5f3517f5-a254-487c-8eee-206ec9aa05a9" />
   </Folder>
+  <Folder Name="/Modules/Sales/">
+    <Project Path="Modules/Sales/Sales.Services/Sales.Services.csproj" Id="a3f3623d-c09a-4f59-af92-47d3f5ae0856" />
+  </Folder>
   <Folder Name="/UI/">
     <Project Path="UI/ConsoleUi/ConsoleUi.csproj">
       <BuildDependency Project="Modules/Notifications/Notifications.Services/Notifications.Services.csproj" />
+      <BuildDependency Project="Modules/Sales/Sales.Services/Sales.Services.csproj" />
     </Project>
   </Folder>
 </Solution>
