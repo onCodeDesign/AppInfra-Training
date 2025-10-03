@@ -21,6 +21,31 @@
 	
 ## 1. Sales Module
 
+### 1.0 [Advanced] Add Sales Module and Sales.Services project to solution
+
+> This exercise is optional. To do it you need to go back in history and checkuout `practice-1.0` tag
+
+Do the following steps:
+ - Create the `Modules\Sales` solution folder and the correspondent `.\Modules\Sales` folder in the source tree 
+	- ! the naming conventions and folder structure matters !
+ - Add the `Sales.Services` project to the solution in this create folder.
+ - Understand how an application with plugins works in .NET (see https://learn.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support)
+	-  add `<EnableDynamicLoading>true</EnableDynamicLoading>` to the `Sales.Services.csproj` file (see `Notifications.Services.csproj` for reference)
+	-  add references to `AppBoot`, `Contracts` with these props (see `Notifications.Services.csproj` for reference):
+		```
+			<Private>false</Private>
+    		<ExcludeAssets>runtime</ExcludeAssets>
+		```
+- Setup `Sales.Services` as a solution dependency of `ConsoleUi` (this is needed so it builds when `ConsoleUi` is build for debug (on F5))
+- Configure `Sales.Services` plugin in AppBoot
+	- in `ConsoleUi/Program.cs` in AppBoot setup:
+		- make sure the NameFilter allows for `Sales.*.` assemblies
+		- add `.AddPlugin("Sales.Services")`
+
+Understand how Plugins Loading is implemented in `AppBoot.AssemblyLoad` namespace.
+  - see `BreadcrumbNameConventionPathBuilder` and `PluginAssemblyLoader` classes to understand why the naming and folders conventions matter.
+
+
 #### 1.1 Sales Services Module
 
 Add a `SalesServicesModule : IModule` and notify when it is alive.
