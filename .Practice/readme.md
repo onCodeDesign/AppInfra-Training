@@ -1,26 +1,54 @@
 # This file contains exercises based on the AppInfra demo
 
-## 1. Notification Service
+## 0. Notifications Module
 
 > __!Objective__: Get familiar with the DemoApp, and see how the Bootstrapper, the Application Initialization, Dependency Injection and Service Locator work
 
-#### 1.1 Notifications Module 
+#### 0.1 Explore the AppInfraDemo solution
+ - Look at the `ConsoleApplication` project. It is the host process
+ - Loot at the `AppBoot` folder. It contains the Bootstrapper and the initialization logic
+ - Look at the `Contracts` folder. It contains the contracts for the services exposed by the modules
 
-Add a `NotificationsModule : IModule` and notify when it is alive.
+#### 0.2 Notifications Serivces
+  - Explore the `Notification.Services` project
+	- `NotificationService` is used to send notifications
+	- `StateChangeSubscriber` shows how a subscriber may be implemented
+	- The `ConsoleUi` implements  the `IAmAliveSubscriber<IModule>` to write a console when a new module is alive
 
-As a model for this, look on how `SaleServicesModule` is implemented and how its *I'm Alive* notification is shown in the `ConsoleApplication`.
+ - Understand how "NotificationsModule is alive!" appears on the console during the application boot.
+
+--------------------
+	
+## 1. Sales Module
+
+### 1.0 [Advanced] Add Sales Module and Sales.Services project to solution
+
+> This exercise is optional. To do it you need to go back in history and checkuout `practice-1.0` tag
+
+Do the following steps:
+ - Create the `Modules\Sales` solution folder and the correspondent `.\Modules\Sales` folder in the source tree 
+	- ! the naming conventions and folder structure matters !
+ - Add the `Sales.Services` project to the solution in this create folder.
+ - Understand how an application with plugins works in .NET (see https://learn.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support)
+	-  add `<EnableDynamicLoading>true</EnableDynamicLoading>` to the `Sales.Services.csproj` file (see `Notifications.Services.csproj` for reference)
+	- Understand how `AppBoot` loads plugins
+		- look at `AppBoot.AssemblyLoad` namespace
+		- look at `BreadcrumbNameConventionPathBuilder` and `PluginAssemblyLoader` classes to understand why the naming and folders conventions matter.	
+- Setup `Sales.Services` as a solution dependency of `ConsoleUi` (this is needed so it builds when `ConsoleUi` is build for debug (on F5))
+- Configure `Sales.Services` plugin in AppBoot
+	- in `ConsoleUi/Program.cs` in AppBoot setup:
+		- make sure the NameFilter allows for `Sales.*.` assemblies
+		- add `.AddPlugin("Sales.Services")`
+
+#### 1.1 Sales Services Module
+
+Add a `SalesServicesModule : IModule` and notify when it is alive.
+
+As a model for this, look on how `NotificationsModule` is implemented and how its *I'm Alive* notification is shown in the `ConsoleApplication`.
 
 #### 1.2. Change the order in which the modules are initialized in a loosely coupled way
 
 Use the `PriorityAttribute` and the `OrderByPriority<T>()` helper method, from `iQuarc.SystemEx` package
-
-#### 1.3. Create a composite for `NotificationService.NotifyAlive()`
-
-Current implementation of `NotifyAlive()` first tries to get the unlabeled `IAmAliveSubscriber<T>` implementation and then it get all labeled implementation.
-	
-This try/catch is ugly and could be avoided w/ a composite `IAmAliveSubscriber` which gets all labeled `IAmAliveSubscriber` and forwards the call to them
- 
- **Solution** see branch `ex/AppInfra/NotificationServiceComposite`
 
 ------------------
 
