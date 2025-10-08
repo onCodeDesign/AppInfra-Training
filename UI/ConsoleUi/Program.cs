@@ -1,6 +1,7 @@
 ﻿using AppBoot;
 using AppBoot.AssemblyLoad;
 using AppBoot.DependencyInjection;
+using ConsoleUi;
 using Contracts.Sales;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,6 +41,5 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 
 Console.WriteLine(); Console.WriteLine("AppBoot done!");
 
-var orderingService = host.Services.GetService<IOrderingService>();
-var c = orderingService?.GetOrdersInfo("Abel").Count();
-Console.WriteLine(c);
+OrdersConsoleApplication app = host.Services.GetRequiredService<OrdersConsoleApplication>();
+app.ShowAllOrders();

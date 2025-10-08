@@ -54,7 +54,7 @@ Use the `PriorityAttribute` and the `OrderByPriority<T>()` helper method, from `
 
 ## 2. Console Application
 
-> Understand AppBoot basics: Modules, Dependency Injection, and Service Locator 
+>  __!Objective__: Understand AppBoot basics: Modules, Dependency Injection, and Service Locator 
 
 ### 2.1. Transform the OrdersConsoleApplication into an IModule
 	
@@ -71,7 +71,7 @@ When do we use stubs and when mocks?
 
 ## 3. Create a Composite Console Application
 
-> Understand how to benefit from the AppBoot dependency discovery and loosely coupled modules
+>  __!Objective__: Understand how to benefit from the AppBoot type discovery and loosely coupled modules
 
 ### 3.1. Create a Console Ui Module that discovers commands and builds a menu from them
 
@@ -101,9 +101,11 @@ Now, the `OrdersConsoleCommand` resulted from transforming the `OrdersConsoleApp
 
 We could move it to a new console project into the *Sales* module folder structure, and the new `CompositeConsoleUiModule` should discover it and use it.
 
+The resulted `CompositeConsoleUiModule` should not take a dependency on `Sales.Services` (as we don't want to depend on implementation details, but it would depend on `Contracts` as it needs the `IConsoleCommand` interface)
+
 *Hints:*
  1. the project should be a class library so it can be deployed on any .NET process
- 2. adjust the build output older to be as it is for the other `Sales.*` assemblies
+ 2. the project should be loaded as a plugin in a similar way with the `Sales.Services`
 
 The assemblies from any module (including *Sales*) should not depend on the `ConsoleApplication` assembly which is the host process and the UI. The dependency should be the other way around. We should invert it by moving the `IConsoleCommand` and the `IConsole` to the `Contracts` assembly  into a new `ConsoleUi` folder.
 
