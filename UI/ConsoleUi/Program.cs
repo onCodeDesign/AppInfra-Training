@@ -27,6 +27,7 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 		options
 			.AddPlugin("Notifications.Services")
 			.AddPlugin("Sales.Services", "Sales.DbContext")
+			.AddPlugin("Export.Services")
 			;
 
 	})
