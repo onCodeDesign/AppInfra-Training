@@ -31,13 +31,16 @@ internal class AssembliesLoader(AssemblyLoadOptions options, IPluginPathBuilder 
             var assemblyName = assembly.GetName();
             if (assemblyName.Name != null && MatchesNameFilter(assemblyName.Name))
             {
-                LoadDefaultAssemblies(assemblyName);
                 yield return assembly;
+                foreach (var matchedDefaultAssembly in LoadDefaultAssemblies(assemblyName))
+                {
+                    yield return matchedDefaultAssembly;
+                }
             }
         }
     }
 
-    private void LoadDefaultAssemblies(AssemblyName assemblyName)
+    private IEnumerable<Assembly> LoadDefaultAssemblies(AssemblyName assemblyName)
     {
         var names = new Queue<AssemblyName>();
         names.Enqueue(assemblyName);
@@ -55,6 +58,11 @@ internal class AssembliesLoader(AssemblyLoadOptions options, IPluginPathBuilder 
             foreach (var reference in assembly.GetReferencedAssemblies())
             {
                 names.Enqueue(reference);
+                if (reference.Name != null && MatchesNameFilter(reference.Name))
+                {
+                    var referencedAssembly = defaultLoadContext.LoadFromAssemblyName(reference);
+                    yield return referencedAssembly;
+                }
             }
         }
     }
