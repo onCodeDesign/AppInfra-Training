@@ -25,8 +25,7 @@ public class AssembliesLoaderTests
         IEnumerable<Assembly> actual = target.LoadAssemblies();
 
         var actualNames = actual.Select(a => a.GetName().Name).ToList();
-        AssertEx.AreEquivalent(actualNames, "AppBoot", "AppBoot.UnitTests"
-            );
+        AssertEx.AreEquivalent(actualNames, "AppBoot", "AppBoot.UnitTests");
     }
 
     private AssembliesLoader GetTarget()
