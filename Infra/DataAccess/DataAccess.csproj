@@ -2,10 +2,10 @@
 
   <ItemDefinitionGroup>
     <ProjectReference>
-      <PrivateAssets>all</PrivateAssets>
+      <PrivateAssets>compile</PrivateAssets>
     </ProjectReference>
     <PackageReference>
-      <PrivateAssets>all</PrivateAssets>
+      <PrivateAssets>compile</PrivateAssets>
     </PackageReference>
   </ItemDefinitionGroup>
 

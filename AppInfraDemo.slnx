@@ -11,6 +11,10 @@
   <Folder Name="/Modules/">
     <Project Path="Modules/Contracts/Contracts.csproj" Id="889c4e60-1b1c-44d1-8c06-2180975f95e1" />
   </Folder>
+  <Folder Name="/Modules/Export/">
+    <Project Path="Modules/Export/Export.DataModel/Export.DataModel.csproj" Id="709f2125-8bad-49f9-a6d0-ee21216be4d1" />
+    <Project Path="Modules/Export/Export.Services/Export.Services.csproj" Id="59f7a385-17ab-425d-b0ba-b035d0560028" />
+  </Folder>
   <Folder Name="/Modules/Notifications/">
     <Project Path="Modules/Notifications/Notifications.Services/Notifications.Services.csproj" Id="5f3517f5-a254-487c-8eee-206ec9aa05a9" />
   </Folder>
@@ -23,6 +27,7 @@
   </Folder>
   <Folder Name="/UI/">
     <Project Path="UI/ConsoleUi/ConsoleUi.csproj">
+      <BuildDependency Project="Modules/Export/Export.Services/Export.Services.csproj" />
       <BuildDependency Project="Modules/Notifications/Notifications.Services/Notifications.Services.csproj" />
       <BuildDependency Project="Modules/Sales/Sales.Services/Sales.Services.csproj" />
     </Project>
