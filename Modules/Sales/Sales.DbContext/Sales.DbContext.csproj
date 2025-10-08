@@ -1,5 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemDefinitionGroup>
+    <ProjectReference>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <PackageReference>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemDefinitionGroup>
+  
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -8,10 +17,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0-rc.1.25451.107" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0-rc.1.25451.107" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Infra\AppBoot\AppBoot.csproj" />
     <ProjectReference Include="..\..\..\Infra\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Sales.DataModel\Sales.DataModel.csproj" />
+
   </ItemGroup>
 
 </Project>

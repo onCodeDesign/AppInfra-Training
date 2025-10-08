@@ -15,8 +15,8 @@ public class ProductQuantity
 public class ProductDescription
 {
     public int? ProductId { get; set; }
-    public string Code { get; set; }
-    public string Description { get; set; }
+    public string? Code { get; set; }
+    public string? Description { get; set; }
 }
 
 public enum UnitOfMeasure

@@ -5,8 +5,8 @@
   </Folder>
   <Folder Name="/Infra/">
     <Project Path="Infra/AppBoot.UnitTests/AppBoot.UnitTests.csproj" Id="e1b53974-4b95-4d1f-8a2a-78f5d75bcea4" />
-    <Project Path="Infra/AppBoot/AppBoot.csproj" Id="0e054565-0ea8-493f-9b57-3da760d2c87f" />
-    <Project Path="Infra/DataAccess/DataAccess.csproj" />
+    <Project Path="Infra/AppBoot/AppBoot.csproj" />
+    <Project Path="Infra/DataAccess/DataAccess.csproj" Id="164a8bf7-5bed-4969-ae25-5c54b2fdd3ab" />
   </Folder>
   <Folder Name="/Modules/">
     <Project Path="Modules/Contracts/Contracts.csproj" Id="889c4e60-1b1c-44d1-8c06-2180975f95e1" />
@@ -15,7 +15,11 @@
     <Project Path="Modules/Notifications/Notifications.Services/Notifications.Services.csproj" Id="5f3517f5-a254-487c-8eee-206ec9aa05a9" />
   </Folder>
   <Folder Name="/Modules/Sales/">
-    <Project Path="Modules/Sales/Sales.Services/Sales.Services.csproj" Id="a3f3623d-c09a-4f59-af92-47d3f5ae0856" />
+    <Project Path="Modules/Sales/Sales.DataModel/Sales.DataModel.csproj" />
+    <Project Path="Modules/Sales/Sales.DbContext/Sales.DbContext.csproj" />
+    <Project Path="Modules/Sales/Sales.Services/Sales.Services.csproj" Id="a3f3623d-c09a-4f59-af92-47d3f5ae0856">
+      <BuildDependency Project="Modules/Sales/Sales.DbContext/Sales.DbContext.csproj" />
+    </Project>
   </Folder>
   <Folder Name="/UI/">
     <Project Path="UI/ConsoleUi/ConsoleUi.csproj">
