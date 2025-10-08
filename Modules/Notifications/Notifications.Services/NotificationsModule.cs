@@ -1,5 +1,6 @@
 ﻿using AppBoot;
 using AppBoot.DependencyInjection;
+using AppBoot.SystemEx.Priority;
 using Contracts.Notifications;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
