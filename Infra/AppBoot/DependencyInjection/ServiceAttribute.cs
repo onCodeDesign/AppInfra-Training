@@ -16,7 +16,7 @@ public class ServiceAttribute : Attribute
         ExportType = exportType;
         Lifetime = lifetime;
     }
-
+        
     public ServiceAttribute(Type exportType)
 		: this(exportType, ServiceLifetime.Transient)
 	{

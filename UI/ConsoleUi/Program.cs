@@ -1,13 +1,15 @@
 ﻿using AppBoot;
 using AppBoot.AssemblyLoad;
 using AppBoot.DependencyInjection;
+using Contracts.Sales;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 Console.WriteLine("Booting up..."); Console.WriteLine();
 
 IBootstrapper bootstrapper = null!;
 
-Host.CreateDefaultBuilder(args).ConfigureServices(services =>
+var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 {
 	bootstrapper = services.AddAppBoot(options =>
 	{
@@ -24,7 +26,7 @@ Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 
 		options
 			.AddPlugin("Notifications.Services")
-			.AddPlugin("Sales.Services")
+			.AddPlugin("Sales.Services", "Sales.DbContext")
 			;
 
 	})
@@ -36,3 +38,7 @@ Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 
 
 Console.WriteLine(); Console.WriteLine("AppBoot done!");
+
+var orderingService = host.Services.GetService<IOrderingService>();
+var c = orderingService?.GetOrdersInfo("Abel").Count();
+Console.WriteLine(c);
