@@ -3,6 +3,7 @@ using AppBoot.AssemblyLoad;
 using AppBoot.DependencyInjection;
 using ConsoleUi;
 using Contracts.Sales;
+using Contracts.Sales.CustomerOrders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -27,7 +28,8 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 
 		options
 			.AddPlugin("Notifications.Services")
-			.AddPlugin("Sales.Services", "Sales.DbContext")
+			.AddPlugin("Sales.Services", "Sales.DbContext", "Sales.ConsoleUi")
+			
 			.AddPlugin("Export.Services")
 			;
 
@@ -43,3 +45,6 @@ Console.WriteLine(); Console.WriteLine("AppBoot done!");
 
 OrdersConsoleApplication app = host.Services.GetRequiredService<OrdersConsoleApplication>();
 app.ShowAllOrders();
+
+var ordersService = host.Services.GetRequiredService<ICustomerOrdersService>();
+ordersService.CancelAllOrdersForCustomer("Abel");
