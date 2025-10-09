@@ -1,9 +1,6 @@
 ﻿using AppBoot;
 using AppBoot.AssemblyLoad;
 using AppBoot.DependencyInjection;
-using ConsoleUi;
-using Contracts.Sales;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 Console.WriteLine("Booting up..."); Console.WriteLine();
@@ -41,5 +38,5 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 
 Console.WriteLine(); Console.WriteLine("AppBoot done!");
 
-OrdersConsoleApplication app = host.Services.GetRequiredService<OrdersConsoleApplication>();
-app.ShowAllOrders();
+//OrdersConsoleApplication app = host.Services.GetRequiredService<OrdersConsoleApplication>();
+//app.ShowAllOrders();
