@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11018.127 d18.0
+VisualStudioVersion = 18.0.11018.127
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{8CCA244E-67D0-4DF5-8B6C-17F317AA607C}"
 EndProject
@@ -30,6 +30,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sales.Services", "Modules\Sales\Sales.Services\Sales.Services.csproj", "{4A29280D-4BB5-4C22-EA77-E2FFB887BE9A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sales.DbContext", "Modules\Sales\Sales.DbContext\Sales.DbContext.csproj", "{8ECFDB0C-9146-4C51-B8AF-3DC696492DAE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Practice", ".Practice", "{AB73E502-96DD-4274-9EDE-A1D7C22FF9FF}"
+	ProjectSection(SolutionItems) = preProject
+		.Practice\PointsOfAttention.md = .Practice\PointsOfAttention.md
+		.Practice\readme.md = .Practice\readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

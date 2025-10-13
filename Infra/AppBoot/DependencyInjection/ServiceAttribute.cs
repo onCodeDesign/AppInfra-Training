@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AppBoot.DependencyInjection;
@@ -13,6 +14,8 @@ public class ServiceAttribute : Attribute
 {
     public ServiceAttribute(Type exportType, ServiceLifetime lifetime)
     {
+        Debug.Assert(exportType!=null, "Services should have an export type");
+
         ExportType = exportType;
         Lifetime = lifetime;
     }

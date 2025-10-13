@@ -14,6 +14,6 @@ public sealed class ServiceRegistrationBehavior : IRegistrationBehavior
 
         var attributes = type.GetCustomAttributes(typeof(ServiceAttribute), false).Cast<ServiceAttribute>();
 
-        return attributes.Select(a => new ServiceDescriptor(a.ExportType ?? type, type, a.Lifetime));
+        return attributes.Select(a => new ServiceDescriptor(a.ExportType, type, a.Lifetime));
     }
 }

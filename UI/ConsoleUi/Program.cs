@@ -21,7 +21,6 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 		options.PluginPathBuilderOption = PluginPathBuilderOption.BreadcrumbNameConvention;
 		options.BreadcrumbNameConventionPathBuilderPluginsDir = "Modules";
 		options.BreadcrumbNameConventionPathBuilderTopDirs = ["UI", "Modules", "Infra"];
-
 		options
 			.AddPlugin("Notifications.Services")
 			.AddPlugin("Sales.Services", "Sales.DbContext")

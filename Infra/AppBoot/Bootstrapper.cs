@@ -12,7 +12,6 @@ namespace AppBoot;
 public sealed class Bootstrapper(IEnumerable<Assembly> applicationAssemblies, IDependencyContainer container) : IBootstrapper, IDisposable
 {
     private readonly List<IRegistrationBehavior> behaviors = new();
-    private IDependencyContainer container = container;
 
     public IEnumerable<Assembly> ApplicationAssemblies { get; } = applicationAssemblies;
 
@@ -24,7 +23,7 @@ public sealed class Bootstrapper(IEnumerable<Assembly> applicationAssemblies, ID
 
     public IBootstrapper Run()
     {
-        Type[] appTypes = ApplicationAssemblies.SelectMany(a => a.GetTypes()).ToArray();
+        IEnumerable<Type> appTypes = ApplicationAssemblies.SelectMany(a => a.GetTypes());
 
         RegistrationsCatalog catalog = new RegistrationsCatalog();
         foreach (Type type in appTypes)

@@ -5,7 +5,7 @@
 > __!Objective__: Get familiar with the DemoApp, and see how the Bootstrapper, the Application Initialization, Dependency Injection and Service Locator work
 
 #### 0.1 Explore the AppInfraDemo solution
- - Look at the `ConsoleApplication` project. It is the host process
+ - Look at the `ConsoleUi` project. It is the host process
  - Loot at the `AppBoot` folder. It contains the Bootstrapper and the initialization logic
  - Look at the `Contracts` folder. It contains the contracts for the services exposed by the modules
 
@@ -124,31 +124,30 @@ b) by module and then by more entries in the same module
 -----------------------------
 
 
-## 4. Ordering Service
+## 4. Customer Orders Service
 
 > !Objective: Understand DataAccess implementation
 
 All below should be called through a simple UI like the Console UI built in previous exercises
 
-### 4.1. Create an operation that returns all the customers which have orders, ordered by store name
+### 4.1. Create a new service in the Sales module that returns all the customers which have orders, ordered by store name
 
-- Write unit tests for this. 
-- There should be tests that verify if there order by is applied.
+[Optional] - Write unit tests for it. Include tests that verify if the OrderBy is applied.
 
 *Hint (linq query):*
 ```
-Customers.Where(c => c.SalesOrderHeaders.Any() && c.StoreID != null)
-		// && c.Store.Name.StartsWith("Active")) - this may be appended for 4.2
-	.OrderBy(c => c.Store.Name)
-	.Select(c => new
-	{
-		Id = c.CustomerID,
-		AccountNumber = c.AccountNumber,
-		Name = c.Store.Name
-	});
+Customers
+	 .Where(c => c.SalesOrderHeaders.Any())
+            .OrderBy(c => c.CompanyName)
+            .Select(c => new CustomerData
+            {
+                Id = c.CustomerID,
+                CompanyName = c.CompanyName,
+                SalesPerson = c.SalesPerson
+            });
 ```
 
-### 4.2. Add more filters
+### 4.2. [Optional] Add more filters and understand how you could unit test those laveraging the IRepository interface testability
 
 - Show only the customers that have the name starting with a string which was read from the console.
 - Show only the customers that have in the name a string which was read from the console
@@ -156,10 +155,11 @@ Customers.Where(c => c.SalesOrderHeaders.Any() && c.StoreID != null)
 
 ### 4.3. Create a console command that sets the status of all orders of a customer
 
- - We can hardcode the status that will be set OR read it from console
+ - Create a new operation in the `OrderingService` that sets the status of all orders of a customer
  - We should read some relevant info about the customer that we will use to find the orders to which we will change the status
+ - The new status should be read from the console OR hardcoded
 
-See the `SalesOrderHeaderStatusValues` class for the values of the `SalesOrderHeader.Status` property
+*See the `SalesOrderHeaderStatusValues` class for the values of the `SalesOrderHeader.Status` property*
 
 ------------------
 
