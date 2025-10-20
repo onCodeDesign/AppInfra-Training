@@ -1,6 +1,8 @@
 ﻿using AppBoot;
 using AppBoot.AssemblyLoad;
 using AppBoot.DependencyInjection;
+using ConsoleUi;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 Console.WriteLine("Booting up..."); Console.WriteLine();

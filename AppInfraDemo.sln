@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{8CCA244E-67D0-4DF5-8B6C-17F317AA607C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleUi", "UI\ConsoleUi\ConsoleUi.csproj", "{E513E557-3FAF-0D2E-F72A-11171988EE60}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4A29280D-4BB5-4C22-EA77-E2FFB887BE9A} = {4A29280D-4BB5-4C22-EA77-E2FFB887BE9A}
+		{4A7B5195-15A6-1849-BF6A-C81E6F07C352} = {4A7B5195-15A6-1849-BF6A-C81E6F07C352}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{8319A2C1-7A63-4639-B37F-0C804007B8C1}"
 EndProject
@@ -28,6 +32,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sales.DataModel", "Modules\Sales\Sales.DataModel\Sales.DataModel.csproj", "{85B66B0C-DDB4-E33A-8626-891A7892B178}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sales.Services", "Modules\Sales\Sales.Services\Sales.Services.csproj", "{4A29280D-4BB5-4C22-EA77-E2FFB887BE9A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8ECFDB0C-9146-4C51-B8AF-3DC696492DAE} = {8ECFDB0C-9146-4C51-B8AF-3DC696492DAE}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sales.DbContext", "Modules\Sales\Sales.DbContext\Sales.DbContext.csproj", "{8ECFDB0C-9146-4C51-B8AF-3DC696492DAE}"
 EndProject
