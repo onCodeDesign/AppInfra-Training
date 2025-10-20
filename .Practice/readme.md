@@ -48,7 +48,7 @@ As a model for this, look on how `NotificationsModule` is implemented and how it
 
 #### 1.2. Change the order in which the modules are initialized in a loosely coupled way
 
-Use the `PriorityAttribute` and the `OrderByPriority<T>()` helper method, from `iQuarc.SystemEx` package
+Use the `PriorityAttribute` and the `OrderByPriority<T>()` helper method, from `AppBoot.SystemEx.Priority`
 
 ------------------
 
@@ -62,7 +62,7 @@ Make this class to implement the `IModule`.
  - You should also consider to rename it, so its name reflects that it is a module
  - The `Program.Main()` should no longer directly depend on it. With this refactor, on the `IModule.Initialize()` the menu should be shown.
 
-### 2.2. Unit Test the `Init()` function of the resulted Module
+### 2.2. [Optional] Unit Test the `Init()` function of the resulted Module
 
 Which is the external dependencies?
 When do we use stubs and when mocks?
@@ -99,15 +99,15 @@ This should allow any other functional module to provide `IConsoleCommand` imple
 
 Now, the `OrdersConsoleCommand` resulted from transforming the `OrdersConsoleApplication` into a `IConsoleCommand` sits in the `ConsoleApplication`, but it is quite intimate with the *Sales* module
 
-We could move it to a new console project into the *Sales* module folder structure, and the new `CompositeConsoleUiModule` should discover it and use it.
+We could move it to a new project into the *Sales* module folder structure, and the new `CompositeConsoleUiModule` should discover it and use it.
 
 The resulted `CompositeConsoleUiModule` should not take a dependency on `Sales.Services` (as we don't want to depend on implementation details, but it would depend on `Contracts` as it needs the `IConsoleCommand` interface)
 
 *Hints:*
- 1. the project should be a class library so it can be deployed on any .NET process
+ 1. the project should be a class library. It can be deployed on any .NET process
  2. the project should be loaded as a plugin in a similar way with the `Sales.Services`
 
-The assemblies from any module (including *Sales*) should not depend on the `ConsoleApplication` assembly which is the host process and the UI. The dependency should be the other way around. We should invert it by moving the `IConsoleCommand` and the `IConsole` to the `Contracts` assembly  into a new `ConsoleUi` folder.
+The assemblies from any module (including *Sales*) should not depend on the `ConsoleUi` assembly which is the host process and the UI. The dependency should be the other way around. We should invert it by moving the `IConsoleCommand` and the `IConsole` to the `Contracts` assembly  into a new `ConsoleUi` folder.
 
 > !Observation:
 By doing this we are decoupling the application from its UI. All the `ConsoleCommand` could be displayed and executed from another host or UI, may that be an WPF app or a Web App.
@@ -187,7 +187,7 @@ Use `EntityInterceptors` and `INotificationService` to implement:
 
 ### 6.1. We want to consistently set the `ModifiedDate` for all entities that have this column
 
- - Now when we modify the order in exercise 4.3 or we add persons in exercise 8 the `ModifiedDate` is not set.
+ - Now, when we modify the order in exercise 4.3 or we add persons in exercise 7 the `ModifiedDate` is not set.
  - One way would be to go in all use cases where these entities are modified / created and set the `ModifiedDate` as well. This would be cumbersome and error prone
  - We should leverage the advantage of the encapsulated Data Access and extend the infrastructure, with an interceptor that does this for all entities.
 
@@ -202,25 +202,77 @@ interface IAuditable
 
 ------------------
 
-## 7. Add Persons Management Module
+## 7. Products Management Module
 
+### 7.0 Add a new Module `ProductsManagementModule`
 > !Objective: Understand how to add new modules to this Application Infrastructure
 
-### 7.1. Use Services from Persons Module in Sales Module
+ - Create a new module `ProductsManagementModule` in the `Modules\ProductsManagement` folder
+ - Create a new project `ProductsManagement.Services` in this folder
+ - Create the `ProductsManagementModule : IModule` class that notifies when it is alive
+ - Add the `ProductsManagement.Services` as a plugin in the AppBoot
+ - Create the `Products.DataModel` project in the `Modules\ProductsManagement` folder
+    - Map only the product related properties (e.g. `Product`, `ProductCategory`, `ProductModel` entities)
+ - Create the `Products.DbContext` project in the `Modules\ProductsManagement` folder
+    - Implement the `IDbContextFactory` to provide the `DbContext` for the `Products.DataModel`
 
-`SalesPerson` references through `BusinessEntityID` a `Person` from Person schema.
-
-Create a new module named `Persons` which exposes a service that gives all the persons. This service should be used by `GetOrdersInfo()` to return the person name in the `SalesOrderInfo` result.
-
-As an alternative, the service from the `Persons` module could be used by the UI and `GetOrdersInfo()` just returns the `BusinessEntityID` key
-
---------------------------
-
-## 8 Add a new `Person`
+### 7.1. Add a new `ProductCategory`
 
 > !Objective: See how existent Application Infrastructure capabilities are used by new features of new Modules
 
-### 8.1 Create support to read a entity from the console
+### 7.1.1. Create support to read a entity from the console
+
+Use the following interfaces:
+
+```
+interface IEntityReader
+{
+    IEntityFieldsReader<T> BeginEntityRead<T>();
+}
+
+interface IEntityFieldsReader<T>
+{
+    IEnumerable<string> GetFields();
+    void SetFieldValue(string value);
+    T GetEntity();
+}
+```
+
+Read the data needed to create a `ProductCategory` entity
+
+### 7.1.2. Create a service that adds a new `ProductCategory` to the system
+
+The above console command which reads the product category info should use this service to add the new read product category.
+
+> !Observe: how the interceptors created in ex. 5 & 6 are working when a new ProductCategory is added
+
+--------
+
+## 8. Persons Managemnt Module
+
+### 8.0 Add a new Module `PersonsManagementModule`
+
+> !Objectives: 
+> 1. Understand how to add new modules to this Application Infrastructure
+  1. Add new table to the database
+  1. Use services from one module into other
+
+- Create a new module `PersonsManagementModule` in the `Modules\PersonsManagement` folder
+ - Create a new project `PersonsManagement.Services` in this folder
+ - Create the `PersonsManagementModule : IModule` class that notifies when it is alive
+ - Add the `PersonsManagement.Services` as a plugin in the AppBoot
+ - Create a new Schema (`Persons`) in the `AdventureWorks` database to host the new `Person` table
+    - Create a new table `Person` in the `Persons` schema with the columns similar to the `Customer` table        
+ - Create the `Persons.DataModel` project in the `Modules\PersonsManagement` folder
+    - Map the `Person` table to an entity
+ - Create the `Persons.DbContext` project in the `Modules\PersonsManagement` folder
+    - Implement the `IDbContextFactory` to provide the `DbContext` for the `Persons.DataModel`
+
+### 8.1. Add a new `Person`
+
+> !Objective: See how existent Application Infrastructure capabilities are used by new features of new Modules
+
+### 7.1.1. Create support to read a entity from the console
 
 Use the following interfaces:
 
@@ -240,9 +292,16 @@ interface IEntityFieldsReader<T>
 
 Read the data needed to create a `Person` entity
 
-### 8.1. Create a service that adds a new `Person` to the system
+### 8.1.2. Create a service that adds a new `Person` to the system
 
-The above console command which reads the person info should use this service to add the new read person.
+The above console command which reads the product category info should use this service to add the new read product category.
 
-> !Observe: how the interceptors created in ex. 5 & 6 are working when a new Person is added
+> !Observe: how the interceptors created in ex. 5 & 6 are working when a new ProductCategory is added
 
+### 8.1.3. Import persons as new customers
+
+> !Objective: Use one service from a module into another module
+ 
+ - Create a service in the `PersonsManagementModule` that gives all persons
+ - Create a service in the `SalesModule` that imports all persons as new customers
+    -  Decide upon a key / Modified data or other criteria to know which persons should be imported as new customers and were not yet imported
