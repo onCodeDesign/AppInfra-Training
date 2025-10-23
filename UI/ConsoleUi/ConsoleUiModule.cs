@@ -11,7 +11,7 @@ namespace ConsoleUi;
 public class ConsoleUiModule : IModule
 {
     private readonly IDictionary<string, IConsoleCommand> commands;
-    private IConsole console;
+    private readonly IConsole console;
 
     public ConsoleUiModule(IEnumerable<IConsoleCommand> commands, IConsole console)
     {

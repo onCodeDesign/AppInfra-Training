@@ -1,4 +1,5 @@
 ﻿using AppBoot.DependencyInjection;
+using AppBoot.SystemEx.Priority;
 using Contracts.Sales;
 using Sales.DataModel.SalesLT;
 
@@ -27,6 +28,7 @@ interface IApprovalServiceStep : IApprovalService
 }
 
 [Service(typeof(IApprovalServiceStep))]
+[Priority(Int32.MaxValue)]
 class BannedCustomer : IApprovalServiceStep
 {
     public bool Approve(ApproveRequest approveRequest)
