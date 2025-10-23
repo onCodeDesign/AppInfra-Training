@@ -25,7 +25,7 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 		options.BreadcrumbNameConventionPathBuilderTopDirs = ["UI", "Modules", "Infra"];
 		options
 			.AddPlugin("Notifications.Services")
-			.AddPlugin("Sales.Services", "Sales.DbContext")
+			.AddPlugin("Sales.Services", "Sales.DbContext", "Sales.Console")
 			.AddPlugin("Export.Services")
 			;
 
@@ -38,6 +38,3 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 
 
 Console.WriteLine(); Console.WriteLine("AppBoot done!");
-
-//OrdersConsoleApplication app = host.Services.GetRequiredService<OrdersConsoleApplication>();
-//app.ShowAllOrders();
