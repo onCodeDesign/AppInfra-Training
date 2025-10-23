@@ -1,7 +1,8 @@
-﻿using Contracts.Sales;
+﻿using AppBoot.DependencyInjection;
+using Contracts.Sales;
 using Microsoft.Extensions.DependencyInjection;
 using Sales.DataModel.SalesLT;
-using AppBoot.DependencyInjection;
+using System;
 
 namespace Sales.Services;
 

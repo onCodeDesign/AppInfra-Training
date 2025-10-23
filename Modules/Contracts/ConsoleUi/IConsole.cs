@@ -1,6 +1,6 @@
 ﻿namespace ConsoleUi;
 
-internal interface IConsole
+public interface IConsole
 {
 	string AskInput(string message);
 	string ReadLine();
