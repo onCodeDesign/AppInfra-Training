@@ -1,15 +1,15 @@
-﻿using AppBoot;
+﻿using Contracts.ConsoleUi;
+using Contracts.Sales;
+using System;
 using AppBoot.DependencyInjection;
 using ConsoleUi;
-using Contracts.Sales;
-using Microsoft.Extensions.Hosting;
 
-namespace Sales.Services;
+namespace Sales.Console;
 
-[Service(typeof(IModule))]
-class OrdersConsoleModule(IConsole console, IOrderingService orderingService) : IModule
+[Service(typeof(IConsoleCommand))]
+public class OrdersConsole(IConsole console, IOrderingService orderingService) : IConsoleCommand
 {
-    public void Initialize(IHost host)
+    public void Execute()
     {
         console.WriteLine("OrdersConsole: Show all orders function");
         string customerName = console.AskInput("Enter customer last name: ");
@@ -22,4 +22,6 @@ class OrdersConsoleModule(IConsole console, IOrderingService orderingService) : 
             console.WriteEntity(salesOrderInfo);
         }
     }
+
+    public string MenuLabel => "Show All Orders";
 }

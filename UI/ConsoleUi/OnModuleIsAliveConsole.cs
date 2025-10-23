@@ -13,3 +13,4 @@ public class OnModuleIsAliveConsole<TModule> : IAmAliveSubscriber<IModule>
 		Console.WriteLine($"{module.Name} is alive!");
 	}
 }
+
