@@ -13,7 +13,7 @@ namespace Sales.DataModel.SalesLT
 {
     [GeneratedCode("Geco", "1.5.0.0")]
     [Serializable]
-    public partial class SalesOrderHeader
+    public partial class SalesOrderHeader : IAuditable
     {
         // Key Properties
         public int SalesOrderID { get; set; }
