@@ -7,11 +7,10 @@ using Contracts.Sales.OrderingService;
 namespace Sales.Console;
 
 [Service(typeof(IConsoleCommand))]
-class OrdersConsole(IConsole console, IOrderingService orderingService) : IConsoleCommand
+class ShowOrdersCommand(IConsole console, IOrderingService orderingService) : IConsoleCommand
 {
     public void Execute()
     {
-        console.WriteLine("OrdersConsole: Show all orders function");
         string customerName = console.AskInput("Enter customer last name: ");
 
         SalesOrderInfo[] orders = orderingService.GetOrdersInfo(customerName);

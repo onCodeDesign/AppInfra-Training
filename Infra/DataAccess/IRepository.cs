@@ -3,7 +3,7 @@ namespace DataAccess;
 /// <summary>
 ///     Generic repository contract for database read operations.
 /// </summary>
-public interface IRepository : IUnitOfWorkFactory
+public interface IRepository
 {
     /// <summary>
     ///     Gets the entities from the database.

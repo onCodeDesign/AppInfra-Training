@@ -1,5 +1,8 @@
-﻿namespace DataAccess;
+﻿using AppBoot.DependencyInjection;
 
+namespace DataAccess;
+
+[Service(typeof(IUnitOfWorkFactory))]
 public class UnitOfWorkFactory : IUnitOfWorkFactory
 {
     private readonly IDbContextFactory contextFactory;

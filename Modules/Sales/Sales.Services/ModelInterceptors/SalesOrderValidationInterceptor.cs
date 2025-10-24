@@ -4,7 +4,7 @@ using Sales.DataModel.SalesLT;
 
 namespace Sales.Services.ModelInterceptors;
 
-[Service(typeof(IEntityInterceptor<SalesOrderHeader>))]
+//[Service(typeof(IEntityInterceptor<SalesOrderHeader>))]
 class SalesOrderValidationInterceptor : IEntityInterceptor<SalesOrderHeader>
 {
     public void OnSave(IEntityEntry<SalesOrderHeader> entry, IUnitOfWork unitOfWork)

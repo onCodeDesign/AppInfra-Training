@@ -2,11 +2,12 @@
 using Contracts.Sales.OrderingService;
 using DataAccess;
 using Sales.DataModel.SalesLT;
+using Sales.DataModel.Values;
 
 namespace Sales.Services;
 
 [Service(typeof(IOrderingService))]
-class OrderingService(IRepository repository, IPriceCalculator calculator, IApprovalService orderApproval) : IOrderingService
+class OrderingService(IRepository repository, IUnitOfWorkFactory uofFactory, IPriceCalculator calculator, IApprovalService orderApproval) : IOrderingService
 {
     public SalesOrderInfo[] GetOrdersInfo(string customerName)
     {
@@ -18,11 +19,44 @@ class OrderingService(IRepository repository, IPriceCalculator calculator, IAppr
                 Number = soh.SalesOrderNumber,
                 ShipToCity = soh.ShipToAddress.City,
                 DueDate = soh.DueDate,
-                TotalDue = soh.TotalDue
+                TotalDue = soh.TotalDue,
+                ShipDate = soh.ShipDate,
+                IsCanceled = soh.Status == SalesOrderHeaderStatusValues.Cancelled,
+                IsShipped = soh.Status == SalesOrderHeaderStatusValues.Shipped
             });
         return orders.ToArray();
     }
 
+    public void ShipCustomerOrders(string customerName)
+    {
+        using var uof = uofFactory.CreateUnitOfWork();
+        var orders = uof.GetEntities<SalesOrderHeader>()
+            .Where(soh => 
+                soh.Customer.LastName == customerName &&
+                soh.Status != SalesOrderHeaderStatusValues.Shipped
+                
+            );
+        foreach (var order in orders)
+        {
+            order.ShipDate = DateTime.Now;
+            order.Status = SalesOrderHeaderStatusValues.Shipped;
+        }
+
+        uof.SaveChanges();
+    }
+
+    public void CancelCustomerOrders(string customerName)
+    {
+        using var uof = uofFactory.CreateUnitOfWork();
+        var orders = uof.GetEntities<SalesOrderHeader>()
+            .Where(soh => soh.Customer.LastName == customerName);
+        foreach (var order in orders)
+        {
+            order.Status = SalesOrderHeaderStatusValues.Cancelled;
+        }
+
+        uof.SaveChanges();
+    }
 
     public SalesOrderResult PlaceOrder(string customerName, OrderRequest request)
     {
@@ -34,7 +68,7 @@ class OrderingService(IRepository repository, IPriceCalculator calculator, IAppr
 
         if (isValid)
         {
-            using (IUnitOfWork uof = repository.CreateUnitOfWork())
+            using (IUnitOfWork uof = uofFactory.CreateUnitOfWork())
             {
                 SalesOrderHeader? order = uof.GetEntities<SalesOrderHeader>()
                     .FirstOrDefault(o => o.CustomerID == c.CustomerID &&

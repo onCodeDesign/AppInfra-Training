@@ -5,4 +5,7 @@ public interface IOrderingService
     SalesOrderResult PlaceOrder(string customerName, OrderRequest request);
 
     SalesOrderInfo[] GetOrdersInfo(string customerName);
+
+    void ShipCustomerOrders(string customerName);
+    void CancelCustomerOrders(string customerName);
 }

@@ -12,4 +12,9 @@ public class SalesOrderInfo
 	public DateTime DueDate { get; set; }
 
 	public decimal TotalDue { get; set; }
+
+	public DateTime? ShipDate { get; set; }
+
+	public bool IsShipped { get; set; }
+	public bool IsCanceled { get; set; }
 }
