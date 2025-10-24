@@ -7,7 +7,7 @@ using Contracts.Sales.OrderingService;
 namespace Sales.Console;
 
 [Service(typeof(IConsoleCommand))]
-public class OrdersConsole(IConsole console, IOrderingService orderingService) : IConsoleCommand
+class OrdersConsole(IConsole console, IOrderingService orderingService) : IConsoleCommand
 {
     public void Execute()
     {
