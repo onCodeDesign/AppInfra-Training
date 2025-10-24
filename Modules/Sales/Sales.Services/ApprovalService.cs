@@ -1,6 +1,6 @@
 ﻿using AppBoot.DependencyInjection;
 using AppBoot.SystemEx.Priority;
-using Contracts.Sales;
+using Contracts.Sales.OrderingService;
 using Sales.DataModel.SalesLT;
 
 namespace Sales.Services;

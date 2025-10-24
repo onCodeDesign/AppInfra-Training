@@ -1,4 +1,4 @@
-namespace Contracts.Sales;
+namespace Contracts.Sales.OrderingService;
 
 public class OrderRequest
 {

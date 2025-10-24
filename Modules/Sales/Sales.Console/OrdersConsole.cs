@@ -1,8 +1,8 @@
 ﻿using Contracts.ConsoleUi;
-using Contracts.Sales;
 using System;
 using AppBoot.DependencyInjection;
 using ConsoleUi;
+using Contracts.Sales.OrderingService;
 
 namespace Sales.Console;
 

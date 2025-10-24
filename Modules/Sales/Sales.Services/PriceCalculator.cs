@@ -1,5 +1,5 @@
 ﻿using AppBoot.DependencyInjection;
-using Contracts.Sales;
+using Contracts.Sales.OrderingService;
 using Microsoft.Extensions.DependencyInjection;
 using Sales.DataModel.SalesLT;
 using System;
