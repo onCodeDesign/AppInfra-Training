@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sales.DataModel;
 
-interface IAuditable
+public interface IAuditable
 {
     DateTime ModifiedDate { get; set; }
 }
