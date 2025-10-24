@@ -35,9 +35,7 @@ public class ConsoleUiModule : IModule
        
         while (commandKey!= "0")
         {
-            PrintMenu();
-            console.WriteLine("");
-            commandKey = console.AskInput("Enter command key: ");
+           commandKey = PrintMenu();
 
             console.WriteLine($"Executing command: {commandKey}");
             console.WriteLine("");
@@ -63,13 +61,27 @@ public class ConsoleUiModule : IModule
 
     }
 
-    private void PrintMenu()
+    private string PrintMenu()
     {
-        console.WriteLine("Available commands:");
-        foreach (var command in commands)
+        var color = Console.ForegroundColor;
+        console.WriteLine("");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        try
         {
-            console.WriteLine($"{command.Key} - {command.Value.MenuLabel}");
+            console.WriteLine("=== Main Menu ===");
+            console.WriteLine("Available commands:");
+            foreach (var command in commands)
+            {
+                console.WriteLine($"{command.Key} - {command.Value.MenuLabel}");
+            }
+
+            console.WriteLine("0 - Exit");
+            console.WriteLine("");
+            return console.AskInput("Enter command key: ");
         }
-        console.WriteLine("0 - Exit");
+        finally
+        {
+            Console.ForegroundColor = color;
+        }
     }
 }
