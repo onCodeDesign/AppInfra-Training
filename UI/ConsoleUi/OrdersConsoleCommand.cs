@@ -1,14 +1,15 @@
 using AppBoot;
 using AppBoot.DependencyInjection;
 using Contracts.Sales;
-using Microsoft.Extensions.Hosting;
 
 namespace ConsoleUi;
 
-[Service(typeof(IModule))]
-internal sealed class OrdersConsoleModule(IConsole console, IOrderingService orderingService) : IModule
+[Service(typeof(IConsoleCommand))]
+internal sealed class OrdersConsoleCommand(IConsole console, IOrderingService orderingService) : IConsoleCommand
 {
-    public void Initialize(IHost host)
+    public string MenuLabel => "Show all orders";
+
+    public void Execute()
     {
         console.WriteLine("OrdersConsole: Show all orders function");
         string customerName = console.AskInput("Enter customer last name: ");
