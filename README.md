@@ -1,2 +1,5 @@
 # AppInfra-Training
-Training repository for Application Infrastructure for Clean Architecture — examples, templates, and exercises for building maintainable, modular, and production-ready systems.
+Training repository for Application Infrastructure for Clean Architecture — containing examples, templates, and exercises used to build maintainable, modular, and production-ready systems.
+
+Upcoming workshop dates and full training details are available at https://clean-architecture.net
+.

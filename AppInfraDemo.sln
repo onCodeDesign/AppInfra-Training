@@ -51,6 +51,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Export.Services", "Modules\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Export.DataModel", "Modules\Export\Export.DataModel\Export.DataModel.csproj", "{F7FCFFBE-664B-53DA-4E09-09D64789573C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{AE669F68-DC66-4CB6-840C-E2A8E762B2DF}"
+	ProjectSection(SolutionItems) = preProject
+		.github\copilot-exclude.yml = .github\copilot-exclude.yml
+		.github\copilot-instructions.md = .github\copilot-instructions.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

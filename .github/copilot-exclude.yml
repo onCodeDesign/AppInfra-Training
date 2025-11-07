@@ -1,0 +1,5 @@
+REPOSITORY-REFERENCE:
+  - "/.Practice/**"
+  - "/.vs/**"
+  - "/.git/**"
+  - "/Modules/Sales/Sales.DbContext/**"

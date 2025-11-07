@@ -1,230 +1,278 @@
-# This file contains exercises based on the AppInfra demo
+﻿# This file contains exercises based on the AppInfra demo
 
 ## 0. Notifications Module
 
-> __!Objective__: Get familiar with the DemoApp, and see how the Bootstrapper, the Application Initialization, Dependency Injection and Service Locator work
+> **Objective:** Get familiar with the DemoApp, and understand how the Bootstrapper, Application Initialization, Dependency Injection, and Service Locator work.
 
-#### 0.1 Explore the AppInfraDemo solution
- - Look at the `ConsoleUi` project. It is the host process
- - Loot at the `AppBoot` folder. It contains the Bootstrapper and the initialization logic
- - Look at the `Contracts` folder. It contains the contracts for the services exposed by the modules
+### 0.1 Explore the AppInfraDemo solution
+- Look at the `ConsoleUi` project — it is the host process.  
+- Look at the `AppBoot` folder — it contains the Bootstrapper and initialization logic.  
+- Look at the `Contracts` folder — it contains the service contracts exposed by the modules.
 
-#### 0.2 Notifications Serivces
-  - Explore the `Notification.Services` project
-	- `NotificationService` is used to send notifications
-	- `StateChangeSubscriber` shows how a subscriber may be implemented
-	- The `ConsoleUi` implements  the `IAmAliveSubscriber<IModule>` to write a console when a new module is alive
+### 0.2 Notifications Services
+- Explore the `Notification.Services` project:
+  - `NotificationService` is used to send notifications.  
+  - `StateChangeSubscriber` shows how a subscriber may be implemented.  
+  - The `ConsoleUi` implements `IAmAliveSubscriber<IModule>` to write a message to the console when a new module becomes active.
+- Understand how *"NotificationsModule is alive!"* appears on the console during application startup.
 
- - Understand how "NotificationsModule is alive!" appears on the console during the application boot.
+---
 
---------------------
-	
 ## 1. Sales Module
 
-### 1.0 [Advanced] Add Sales Module and Sales.Services project to solution
+### 1.0 [Optional][Advanced] Add Sales Module and Sales.Services project to the solution
 
-> This exercise is optional. To do it you need to go back in history and checkuout `practice-1.0` tag
+> This exercise is optional. To complete it, you need to go back in history and check out the `practice-1.0` tag.
 
-Do the following steps:
- - Create the `Modules\Sales` solution folder and the correspondent `.\Modules\Sales` folder in the source tree 
-	- ! the naming conventions and folder structure matters !
- - Add the `Sales.Services` project to the solution in this create folder.
- - Understand how an application with plugins works in .NET (see https://learn.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support)
-	-  add `<EnableDynamicLoading>true</EnableDynamicLoading>` to the `Sales.Services.csproj` file (see `Notifications.Services.csproj` for reference)
-	- Understand how `AppBoot` loads plugins
-		- look at `AppBoot.AssemblyLoad` namespace
-		- look at `BreadcrumbNameConventionPathBuilder` and `PluginAssemblyLoader` classes to understand why the naming and folders conventions matter.	
-- Setup `Sales.Services` as a solution dependency of `ConsoleUi` (this is needed so it builds when `ConsoleUi` is build for debug (on F5))
-- Configure `Sales.Services` plugin in AppBoot
-	- in `ConsoleUi/Program.cs` in AppBoot setup:
-		- make sure the NameFilter allows for `Sales.*.` assemblies
-		- add `.AddPlugin("Sales.Services")`
+Steps:
+- Create a `Modules\Sales` solution folder and the corresponding `.\Modules\Sales` folder in the source tree.  
+  - ⚠️ The naming conventions and folder structure matter!  
+- Add the `Sales.Services` project to the solution inside this new folder.  
+- Understand how an application with plugins works in .NET (see [Microsoft Docs](https://learn.microsoft.com/en-us/dotnet/core/tutorials/creating-app-with-plugin-support)):  
+  - Add `<EnableDynamicLoading>true</EnableDynamicLoading>` to the `Sales.Services.csproj` file (see `Notifications.Services.csproj` for reference).  
+  - Understand how `AppBoot` loads plugins:
+    - Check the `AppBoot.AssemblyLoad` namespace.  
+    - Review the `BreadcrumbNameConventionPathBuilder` and `PluginAssemblyLoader` classes to see why naming and folder conventions are important.  
+- Set up `Sales.Services` as a solution dependency of `ConsoleUi` (so it builds automatically when `ConsoleUi` is built for debug / F5).  
+- Configure the `Sales.Services` plugin in `AppBoot`:  
+  - In `ConsoleUi/Program.cs`, inside the AppBoot setup:
+    - Ensure the `NameFilter` allows `Sales.*` assemblies.  
+    - Add `.AddPlugin("Sales.Services")`.
 
-#### 1.1 Sales Services Module
+### 1.1 Sales Services Module
 
-Add a `SalesServicesModule : IModule` and notify when it is alive.
+Add a `SalesServicesModule : IModule` and make it send a notification when it becomes active.
 
-As a model for this, look on how `NotificationsModule` is implemented and how its *I'm Alive* notification is shown in the `ConsoleApplication`.
+Use `NotificationsModule` as a model and see how its *“I’m alive”* notification is displayed in the console application.
 
-#### 1.2. Change the order in which the modules are initialized in a loosely coupled way
+### 1.2 Change the module initialization order in a loosely coupled way
 
-Use the `PriorityAttribute` and the `OrderByPriority<T>()` helper method, from `AppBoot.SystemEx.Priority`
+Use the `PriorityAttribute` and the `OrderByPriority<T>()` helper method from `AppBoot.SystemEx.Priority`.
+
 
 ------------------
 
 ## 2. Console Application
 
->  __!Objective__: Understand AppBoot basics: Modules, Dependency Injection, and Service Locator 
+> **Objective:** Understand AppBoot basics — Modules, Dependency Injection, and Service Locator.
 
-### 2.1. Transform the OrdersConsoleApplication into an IModule
-	
-Make this class to implement the `IModule`. 
- - You should also consider to rename it, so its name reflects that it is a module
- - The `Program.Main()` should no longer directly depend on it. With this refactor, on the `IModule.Initialize()` the menu should be shown.
+### 2.1 Transform the OrdersConsoleApplication into an IModule
 
-### 2.2. [Optional] Unit Test the `Init()` function of the resulted Module
+- Make the `OrdersConsoleApplication` class implement the `IModule` interface.  
+- Consider renaming it so the name clearly indicates it represents a module.  
+- The `Program.Main()` method should no longer directly depend on this class.  
+- After refactoring, the menu should be shown from the `IModule.Initialize()` method instead of `Main()`.
 
-Which is the external dependencies?
-When do we use stubs and when mocks?
+### 2.2 [Optional] Unit test the `Init()` function of the resulting module
+
+- Identify the external dependencies of the module.  
+- Discuss when to use *stubs* and when to use *mocks*.
+
 
 --------------------
 
 ## 3. Create a Composite Console Application
 
->  __!Objective__: Understand how to benefit from the AppBoot type discovery and loosely coupled modules
+> **Objective:** Understand how to benefit from AppBoot’s type discovery and loosely coupled modules.
 
-### 3.1. Create a Console Ui Module that discovers commands and builds a menu from them
+### 3.1 Create a Console UI Module that discovers commands and builds a menu from them
 
-Follow the following steps as guidance:
+Follow the steps below as guidance:
 
-1. Create the `IConsoleCommand` interface as below:
+Step a) Create the `IConsoleCommand` interface as shown:
 
-```
-public interface IConsoleCommand
-{
-    void Execute();
-    string MenuLabel { get; }
-}
-```
+   ```csharp
+   public interface IConsoleCommand
+   {
+       void Execute();
+       string MenuLabel { get; }
+   }
+   ```
 
-2. Create the `ConsoleUiModule` class that implements `IModule`. It would discover all the `IConsoleCommand` implementations, and will build a menu with them on its `Initialize()` function.
+Step b) Create the `ConsoleUiModule` class that implements `IModule`.  
+   It should discover all `IConsoleCommand` implementations and build a menu from them inside its `Initialize()` method.
 
+Step c) Transform the `OrdersConsoleModule` into an `IConsoleCommand` implementation.
 
-3. Transform the OrdersConsoleApplication, in a `IConsoleCommand` implementation
+This setup will allow any other functional module to provide its own `IConsoleCommand` implementations.  
+The `ConsoleUiModule` will automatically discover them and present them to the user for execution, resulting in a loosely coupled relationship between the modules and their UI commands.
 
+---
 
-This should allow any other functional module to provide `IConsoleCommand` implementations. The `ConsoleUiModule` will discover them and will present them to the user for execution. It results a loosely coupling between the modules and their UI commands
+### 3.2 Update the solution structure so that each module can have its own console commands, independent of the host process or UI app
 
-### 3.2. Update the solution structure in such way that each module may have its own Console Commands and it does not depend on the host process or the UI app
+Currently, the `OrdersConsoleCommand`—created from transforming the `OrdersConsoleModule` into an `IConsoleCommand`—resides in the `ConsoleApplication` project, even though it’s closely related to the *Sales* module.
 
-Now, the `OrdersConsoleCommand` resulted from transforming the `OrdersConsoleApplication` into a `IConsoleCommand` sits in the `ConsoleApplication`, but it is quite intimate with the *Sales* module
+We can move it to a new project inside the *Sales* module folder structure.  
+The `CompositeConsoleUiModule` should then discover and use it.
 
-We could move it to a new project into the *Sales* module folder structure, and the new `CompositeConsoleUiModule` should discover it and use it.
+The resulting `CompositeConsoleUiModule` should **not** depend directly on `Sales.Services` (to avoid coupling with implementation details), but it **should** depend on `Contracts`, as it requires access to the `IConsoleCommand` interface.
 
-The resulted `CompositeConsoleUiModule` should not take a dependency on `Sales.Services` (as we don't want to depend on implementation details, but it would depend on `Contracts` as it needs the `IConsoleCommand` interface)
+**Hints:**
+1. The new project should be a class library — it can be deployed in any .NET process.  
+2. The project should be loaded as a plugin, in a similar way to `Sales.Services`.
 
-*Hints:*
- 1. the project should be a class library. It can be deployed on any .NET process
- 2. the project should be loaded as a plugin in a similar way with the `Sales.Services`
+Assemblies from any module (including *Sales*) should not depend on the `ConsoleUi` assembly, which is the host process and UI.  
+The dependency should go the other way around — we can invert it by moving the `IConsoleCommand` and `IConsole` interfaces into the `Contracts` assembly, under a new `ConsoleUi` folder.
 
-The assemblies from any module (including *Sales*) should not depend on the `ConsoleUi` assembly which is the host process and the UI. The dependency should be the other way around. We should invert it by moving the `IConsoleCommand` and the `IConsole` to the `Contracts` assembly  into a new `ConsoleUi` folder.
+> **Observation:**  
+> By doing this, we decouple the application from its UI.  
+> All `ConsoleCommand` implementations could be displayed and executed from another host or UI, such as a WPF or web application.
 
-> !Observation:
-By doing this we are decoupling the application from its UI. All the `ConsoleCommand` could be displayed and executed from another host or UI, may that be an WPF app or a Web App.
+> **Observation:**  
+> Review the references by generating a *Project Dependency Diagram*.
 
-> !Observation:
-Look at the references by generating the *Project Dependency Diagram*
+---
 
+### 3.3 Order the menu entries
 
-### 3.3. Order the Menu entries
-
-a) in a declarative manner
-b) by module and then by more entries in the same module
+a) In a declarative manner.  
+b) By module, and then by additional entries within the same module.
 
 -----------------------------
 
 
 ## 4. Customer Orders Service
 
-> !Objective: Understand DataAccess implementation
+> **Objective:** Understand DataAccess implementation.
 
-All below should be called through a simple UI like the Console UI built in previous exercises
+All the following exercises should be called through a simple UI, such as the Console UI built in the previous labs.
 
-### 4.1. Create a new service in the Sales module that returns all the customers which have orders, ordered by store name
+---
 
-[Optional] - Write unit tests for it. Include tests that verify if the OrderBy is applied.
+### 4.1 Create a new service in the Sales module that returns all customers with orders, ordered by company name
 
-*Hint (linq query):*
-```
+[Optional] Write unit tests for this service. Include tests that verify whether the `OrderBy` is applied correctly.
+
+**Hint (LINQ query):**
+
+```csharp
 Customers
-	 .Where(c => c.SalesOrderHeaders.Any())
-            .OrderBy(c => c.CompanyName)
-            .Select(c => new CustomerData
-            {
-                Id = c.CustomerID,
-                CompanyName = c.CompanyName,
-                SalesPerson = c.SalesPerson
-            });
+    .Where(c => c.SalesOrderHeaders.Any())
+    .OrderBy(c => c.CompanyName)
+    .Select(c => new CustomerData
+    {
+        Id = c.CustomerID,
+        CompanyName = c.CompanyName,
+        SalesPerson = c.SalesPerson
+    });
 ```
 
-### 4.2. [Optional] Add more filters and understand how you could unit test those laveraging the IRepository interface testability
+---
 
-- Show only the customers that have the name starting with a string which was read from the console.
-- Show only the customers that have in the name a string which was read from the console
-- Write Unit Tests for the above
+### 4.2 [Optional] Add more filters and understand how to unit test them by leveraging the `IRepository` interface’s testability
 
-### 4.3. Create a console command that sets the status of all orders of a customer
+- Show only the customers whose company name starts with a string read from the console.  
+- Show only the customers whose company contains a string read from the console.  
+- Write unit tests for the above cases.
 
- - Create a new operation in the `OrderingService` that sets the status of all orders of a customer
- - We should read some relevant info about the customer that we will use to find the orders to which we will change the status
- - The new status should be read from the console OR hardcoded
+---
 
-*See the `SalesOrderHeaderStatusValues` class for the values of the `SalesOrderHeader.Status` property*
+### 4.3 Create a console command that sets the status of all orders for a given customer
+
+- Add a new operation in the `OrderingService` that sets the status of all orders for a specific customer.  
+- Read the relevant customer information from the console to find the orders whose status needs to be changed.  
+- The new status can be read from the console or hardcoded for simplicity.
+
+> **Hint:**  
+> See the `SalesOrderHeaderStatusValues` class for possible values of the `SalesOrderHeader.Status` property.
 
 ------------------
 
 ## 5. DataAccess.EntityInterceptors
 
-> !Objective: Understand and use EntityInterceptors
+> **Objective:** Understand and use EntityInterceptors.
 
-Use `EntityInterceptors` and `INotificationService` to implement:
+Use `EntityInterceptors` and `INotificationService` to implement the following exercises:
 
-### 5.1. Implement a `IStateChangeSubscriber<SalesOrderHeader>` that shows on the console when a `SalesOrderHeader` is created, deleted or changed 
+---
 
-*Hint:* This should be part of the Sales Module
+### 5.1 Implement an `IStateChangeSubscriber<SalesOrderHeader>` that logs to the console when a `SalesOrderHeader` is created, deleted, or changed
 
-### 5.2 Implement a default `IStateChangeSubscriber<T>` that writes in a text file when any DTO is created, deleted or changed
- 
-*Hint:* This should be part of the Notifications Module
+The `IStateChangeSubscriber` will be notified through the `Notifications.Services.NotificationService`. This will also allow other subscribers to be notified when a `SalesOrderHeader` entity is created, deleted, or changed.
 
-> !Observe and discuss the differences of who triggers the notification
+What classes do need to work together to achieve this?
+How are we notified when an entity is created, deleted, or changed?
+
+**Hints:**
+- Understand the difference between `GlobalEntityInterceptors` and `EntityInterceptors`.  
+- Review the `InterceptorsResolver` to see how they are applied.  
+- Check the template implementations:  
+  - `InterceptorsResolver : IInterceptorsResolver`  
+  - `GlobalEntityInterceptor<T> : IEntityInterceptor<T>`  
+- Decide which implementation should be applied in this case.
+- 
+
+The `IStateChangeSubscriber<SalesOrderHeader>`should be part of the *Sales* module. Which project should it go into?
+
+
+### 5.2 Implement a default `IStateChangeSubscriber<T>` that writes to a text file when any DTO is created, deleted, or changed
+
+This should be part of the *Notifications* module.
+
+> **Observation:**  
+> Compare and discuss the differences in how and where the notifications are triggered.
 
 -----------------
 
 ## 6. Add Entity Auditing
 
-> !Objective: Understand the DataAccess benefit of low costs when adding new features
+> **Objective:** Understand how DataAccess enables low-cost feature additions.
 
-### 6.1. We want to consistently set the `ModifiedDate` for all entities that have this column
+### 6.1 Consistently set the `ModifiedDate` for all entities that have this column
 
- - Now, when we modify the order in exercise 4.3 or we add persons in exercise 7 the `ModifiedDate` is not set.
- - One way would be to go in all use cases where these entities are modified / created and set the `ModifiedDate` as well. This would be cumbersome and error prone
- - We should leverage the advantage of the encapsulated Data Access and extend the infrastructure, with an interceptor that does this for all entities.
+- Currently, when modifying an order in exercise 4.3 or adding persons in exercise 7, the `ModifiedDate` is not being set.  
+- One approach would be to manually update the `ModifiedDate` in all use cases where entities are created or modified. However, this is **cumbersome and error-prone**.  
+- Instead, we should leverage the encapsulated Data Access layer and extend the infrastructure with an **interceptor** that automatically sets this value for all relevant entities.
 
- The interface which should be implemented by the Data Model entities could look like:
+The interface that should be implemented by the data model entities could look like:
 
-```
+```csharp
 interface IAuditable
 {
-    DateTime ModifiedDate {get;set;}
+    DateTime ModifiedDate { get; set; }
 }
 ```
+
+ - Make all entities from the `Sales.DataModel`, which have the `ModifiedDate` property to implement this interface.
+ - Create an global entity interceptor that sets the `ModifiedDate` to `DateTime.UtcNow` whenever an entity implementing `IAuditable` is created or modified.
+
+ Questions:
+  - Which kind of interceptor should be used here?
+  - How should we register this interceptor so that it is applied to all relevant entities?
 
 ------------------
 
 ## 7. Products Management Module
 
-### 7.0 Add a new Module `ProductsManagementModule`
-> !Objective: Understand how to add new modules to this Application Infrastructure
+---
 
- - Create a new module `ProductsManagementModule` in the `Modules\ProductsManagement` folder
- - Create a new project `ProductsManagement.Services` in this folder
- - Create the `ProductsManagementModule : IModule` class that notifies when it is alive
- - Add the `ProductsManagement.Services` as a plugin in the AppBoot
- - Create the `Products.DataModel` project in the `Modules\ProductsManagement` folder
-    - Map only the product related properties (e.g. `Product`, `ProductCategory`, `ProductModel` entities)
- - Create the `Products.DbContext` project in the `Modules\ProductsManagement` folder
-    - Implement the `IDbContextFactory` to provide the `DbContext` for the `Products.DataModel`
+### 7.0 Add a new module: `ProductsManagement`
 
-### 7.1. Add a new `ProductCategory`
+> **Objective:** Understand how to add new modules to the Application Infrastructure.
 
-> !Objective: See how existent Application Infrastructure capabilities are used by new features of new Modules
+- Create a new module `ProductsManagement` in the `Modules\ProductsManagement` folder.  
+- Create a new project `ProductsManagement.Services` in this folder.  
+- Implement the class `ProductsManagementModule : IModule` that sends a notification when it becomes active.  
+- Add `ProductsManagement.Services` as a plugin in the AppBoot setup.  
+- Create the `Products.DataModel` project under the `Modules\ProductsManagement` folder.  
+  - Map only the product-related entities (e.g., `Product`, `ProductCategory`, `ProductModel`).  
+- Create the `Products.DbContext` project in the same folder.  
+  - Implement `IDbContextFactory` to provide the `DbContext` for the `Products.DataModel`.
 
-### 7.1.1. Create support to read a entity from the console
+---
 
-Use the following interfaces:
+### 7.1 Add a new `ProductCategory`
 
-```
+> **Objective:** Understand how existing Application Infrastructure capabilities can be reused by new modules.
+
+---
+
+### 7.1.1 Create support for reading an entity from the console
+
+- Use the interfaces below and add them to the `Contracts` project so that they can be reused by multiple modules.
+
+```csharp
 interface IEntityReader
 {
     IEntityFieldsReader<T> BeginEntityRead<T>();
@@ -238,13 +286,20 @@ interface IEntityFieldsReader<T>
 }
 ```
 
-Read the data needed to create a `ProductCategory` entity
+- Create implementations of these interfaces in the `ConsoleUi` project.  
+- Create a console command in the `ProductsManagement` module that uses these interfaces to read the data required to create a `ProductCategory` entity.  
+  - In this step, only read the data — do not persist it yet.
 
-### 7.1.2. Create a service that adds a new `ProductCategory` to the system
+---
 
-The above console command which reads the product category info should use this service to add the new read product category.
+### 7.1.2 Create a service that adds a new `ProductCategory` to the system
 
-> !Observe: how the interceptors created in ex. 5 & 6 are working when a new ProductCategory is added
+- Add a service in the `ProductsManagement` module that adds a new `ProductCategory` to the database.  
+  - The service should use the `IUnitOfWork` from the `DataAccess` layer.  
+- The console command created earlier (which reads the product category info) should now use this service to insert the newly read product category.
+
+> **Observation:**  
+> Notice how the interceptors created in exercises 5 and 6 are automatically triggered when a new `ProductCategory` is added.
 
 --------
 
