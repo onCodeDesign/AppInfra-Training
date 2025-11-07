@@ -38,6 +38,3 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 
 
 Console.WriteLine(); Console.WriteLine("AppBoot done!");
-
-//OrdersConsoleApplication app = host.Services.GetRequiredService<OrdersConsoleApplication>();
-//app.ShowAllOrders();
