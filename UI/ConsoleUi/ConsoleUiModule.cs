@@ -2,6 +2,7 @@ using AppBoot;
 using AppBoot.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
+using System;
 
 namespace ConsoleUi;
 
@@ -30,15 +31,28 @@ internal sealed class ConsoleUiModule : IModule
 
         while (true)
         {
+            // leave some space before the menu
             console.WriteLine("");
-            console.WriteLine("== Application Menu ==");
+            console.WriteLine("");
 
-            for (int i = 0; i < commandList.Count; i++)
+            // Draw menu in a distinct color
+            var previousColor = Console.ForegroundColor;
+            try
             {
-                console.WriteLine($"{i + 1}) {commandList[i].MenuLabel}");
-            }
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                console.WriteLine("== Application Menu ==");
 
-            console.WriteLine("0) Exit");
+                for (int i = 0; i < commandList.Count; i++)
+                {
+                    console.WriteLine($"{i + 1}) {commandList[i].MenuLabel}");
+                }
+
+                console.WriteLine("0) Exit");
+            }
+            finally
+            {
+                Console.ForegroundColor = previousColor;
+            }
 
             string choice = console.AskInput("Choose an option: ");
             if (string.IsNullOrWhiteSpace(choice))
@@ -53,14 +67,29 @@ internal sealed class ConsoleUiModule : IModule
                 idx -= 1; // make zero-based
                 if (idx >= 0 && idx < commandList.Count)
                 {
+                    // leave blank line between menu and command output
+                    console.WriteLine("");
+
+                    var prev = Console.ForegroundColor;
                     try
                     {
-                        commandList[idx].Execute();
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        try
+                        {
+                            commandList[idx].Execute();
+                        }
+                        catch (Exception ex)
+                        {
+                            console.WriteLine($"Error executing command: {ex.Message}");
+                        }
                     }
-                    catch (Exception ex)
+                    finally
                     {
-                        console.WriteLine($"Error executing command: {ex.Message}");
+                        Console.ForegroundColor = prev;
                     }
+
+                    // leave a blank line after command execution
+                    console.WriteLine("");
                 }
                 else
                 {
