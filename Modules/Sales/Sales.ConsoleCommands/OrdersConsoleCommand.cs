@@ -1,12 +1,21 @@
-using AppBoot;
 using AppBoot.DependencyInjection;
+using Contracts.ConsoleUi;
 using Contracts.Sales;
 
-namespace ConsoleUi;
+namespace Sales.ConsoleCommands;
 
 [Service(typeof(IConsoleCommand))]
-internal sealed class OrdersConsoleCommand(IConsole console, IOrderingService orderingService) : IConsoleCommand
+internal sealed class OrdersConsoleCommand : IConsoleCommand
 {
+    private readonly IConsole console;
+    private readonly IOrderingService orderingService;
+
+    public OrdersConsoleCommand(IConsole console, IOrderingService orderingService)
+    {
+        this.console = console;
+        this.orderingService = orderingService;
+    }
+
     public string MenuLabel => "Show all orders";
 
     public void Execute()

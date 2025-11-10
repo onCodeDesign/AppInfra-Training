@@ -3,6 +3,7 @@ using AppBoot.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 using System;
+using Contracts.ConsoleUi;
 
 namespace ConsoleUi;
 
@@ -33,7 +34,7 @@ internal sealed class ConsoleUiModule : IModule
         {
             // leave some space before the menu
             console.WriteLine("");
-            console.WriteLine("");
+            console.WriteLine("" );
 
             // Draw menu in a distinct color
             var previousColor = Console.ForegroundColor;
@@ -68,7 +69,7 @@ internal sealed class ConsoleUiModule : IModule
                 if (idx >= 0 && idx < commandList.Count)
                 {
                     // leave blank line between menu and command output
-                    console.WriteLine("");
+                    console.WriteLine("" );
 
                     var prev = Console.ForegroundColor;
                     try
@@ -89,7 +90,7 @@ internal sealed class ConsoleUiModule : IModule
                     }
 
                     // leave a blank line after command execution
-                    console.WriteLine("");
+                    console.WriteLine("" );
                 }
                 else
                 {

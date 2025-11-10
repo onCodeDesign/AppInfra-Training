@@ -1,11 +1,12 @@
 using AppBoot.DependencyInjection;
 using AppBoot.SystemEx;
 using Microsoft.Extensions.DependencyInjection;
+using Contracts.ConsoleUi;
 
 namespace ConsoleUi;
 
 [Service(typeof(IConsole), ServiceLifetime.Singleton)]
-class AppConsole : IConsole
+internal class AppConsole : IConsole
 {
     public string AskInput(string message)
     {
