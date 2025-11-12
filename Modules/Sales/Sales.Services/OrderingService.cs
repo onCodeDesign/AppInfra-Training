@@ -23,6 +23,23 @@ class OrderingService(IRepository repository, IPriceCalculator calculator, IAppr
         return orders.ToArray();
     }
 
+    public int SetOrdersStatus(string customerLastName, byte status)
+    {
+        using (IUnitOfWork uof = repository.CreateUnitOfWork())
+        {
+            var orders = uof.GetEntities<SalesOrderHeader>()
+                .Where(o => o.Customer.LastName == customerLastName);
+
+            foreach (var order in orders)
+            {
+                order.Status = status;
+            }
+
+            uof.SaveChanges();
+            return orders.Count();
+        }
+    }
+
 
     public SalesOrderResult PlaceOrder(string customerName, OrderRequest request)
     {
