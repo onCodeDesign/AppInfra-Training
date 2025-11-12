@@ -71,6 +71,7 @@ repo-root/
 - **Mapping:** Use manual mapping rather the frameworks.
 - **Immutability:** Prefer records for value objects; entities keep private setters where possible.
 - **Configuration:** Use `IOptions<T>`; **never** hardcode secrets or connection strings.
+- **Comments:** Avoid using comments. Prefer explicit code.
 
 ---
 

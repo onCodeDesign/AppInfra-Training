@@ -1,10 +1,12 @@
 using AppBoot.DependencyInjection;
+using AppBoot.SystemEx.Priority;
 using Contracts.ConsoleUi;
 using Contracts.Sales;
 
 namespace Sales.ConsoleCommands;
 
 [Service(typeof(IConsoleCommand))]
+[Priority(Priorities.High)]
 internal sealed class OrdersConsoleCommand : IConsoleCommand
 {
     private readonly IConsole console;

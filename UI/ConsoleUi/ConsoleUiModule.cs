@@ -4,25 +4,20 @@ using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 using System;
 using Contracts.ConsoleUi;
+using System.Linq;
+using System.Reflection;
+using AppBoot.SystemEx.Priority;
 
 namespace ConsoleUi;
 
 [Service(typeof(IModule))]
-internal sealed class ConsoleUiModule : IModule
+internal sealed class ConsoleUiModule(IConsole console, IEnumerable<IConsoleCommand> commands) : IModule
 {
-    private readonly IConsole console;
-    private readonly IEnumerable<IConsoleCommand> commands;
-
-    public ConsoleUiModule(IConsole console, IEnumerable<IConsoleCommand> commands)
-    {
-        this.console = console;
-        this.commands = commands;
-    }
+    private record MenuEntry(IConsoleCommand Command, string Module, int Priority);
 
     public void Initialize(IHost host)
     {
-        // Build menu from discovered commands
-        var commandList = new List<IConsoleCommand>(commands);
+        List<IConsoleCommand> commandList = new List<IConsoleCommand>(commands);
 
         if (commandList.Count == 0)
         {
@@ -30,30 +25,23 @@ internal sealed class ConsoleUiModule : IModule
             return;
         }
 
+        var sortedCommands = commandList
+            .Select(c =>
+            {
+                var t = c.GetType();
+                var asmName = t.Assembly.GetName().Name ?? string.Empty;
+                var module = asmName.Split('.').FirstOrDefault() ?? asmName;
+                var prAttr = t.GetCustomAttribute<PriorityAttribute>();
+                var priority = prAttr?.Value ?? 0;
+                return new MenuEntry(c, module, priority);
+            })
+            .OrderBy(ci => ci.Module)
+            .ThenBy(ci => ci.Priority)
+            .ToList();
+
         while (true)
         {
-            // leave some space before the menu
-            console.WriteLine("");
-            console.WriteLine("" );
-
-            // Draw menu in a distinct color
-            var previousColor = Console.ForegroundColor;
-            try
-            {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                console.WriteLine("== Application Menu ==");
-
-                for (int i = 0; i < commandList.Count; i++)
-                {
-                    console.WriteLine($"{i + 1}) {commandList[i].MenuLabel}");
-                }
-
-                console.WriteLine("0) Exit");
-            }
-            finally
-            {
-                Console.ForegroundColor = previousColor;
-            }
+            DrawMenu(sortedCommands);
 
             string choice = console.AskInput("Choose an option: ");
             if (string.IsNullOrWhiteSpace(choice))
@@ -65,11 +53,10 @@ internal sealed class ConsoleUiModule : IModule
 
             if (int.TryParse(choice, out int idx))
             {
-                idx -= 1; // make zero-based
-                if (idx >= 0 && idx < commandList.Count)
+                idx -= 1;
+                if (idx >= 0 && idx < sortedCommands.Count)
                 {
-                    // leave blank line between menu and command output
-                    console.WriteLine("" );
+                    console.WriteLine("");
 
                     var prev = Console.ForegroundColor;
                     try
@@ -77,7 +64,7 @@ internal sealed class ConsoleUiModule : IModule
                         Console.ForegroundColor = ConsoleColor.Green;
                         try
                         {
-                            commandList[idx].Execute();
+                            sortedCommands[idx].Command.Execute();
                         }
                         catch (Exception ex)
                         {
@@ -89,8 +76,7 @@ internal sealed class ConsoleUiModule : IModule
                         Console.ForegroundColor = prev;
                     }
 
-                    // leave a blank line after command execution
-                    console.WriteLine("" );
+                    console.WriteLine("");
                 }
                 else
                 {
@@ -101,6 +87,48 @@ internal sealed class ConsoleUiModule : IModule
             {
                 console.WriteLine("Invalid input. Enter a number.");
             }
+        }
+    }
+
+    private void DrawMenu(List<MenuEntry> sorted)
+    {
+        console.WriteLine(""); console.WriteLine("");
+
+        var previousColor = Console.ForegroundColor;
+        try
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            console.WriteLine("== Application Menu ==");
+
+            int index = 1;
+            string previousModule = null;
+            foreach (var ci in sorted)
+            {
+                if (!string.Equals(previousModule, ci.Module, StringComparison.Ordinal))
+                {
+                    var prev = Console.ForegroundColor;
+                    try
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        console.WriteLine($"-- {ci.Module} --");
+                    }
+                    finally
+                    {
+                        Console.ForegroundColor = prev;
+                    }
+
+                    previousModule = ci.Module;
+                }
+
+                console.WriteLine($"\t{index}) {ci.Command.MenuLabel}");
+                index++;
+            }
+
+            console.WriteLine("(0) Exit");
+        }
+        finally
+        {
+            Console.ForegroundColor = previousColor;
         }
     }
 }
