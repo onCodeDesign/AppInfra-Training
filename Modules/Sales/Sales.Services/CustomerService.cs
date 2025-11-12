@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 using AppBoot.DependencyInjection;
 using Contracts.Sales;
 using DataAccess;
@@ -10,8 +12,14 @@ class CustomerService(IRepository repository) : ICustomerService
 {
     public CustomerData[] GetCustomersWithOrders()
     {
-        var query = repository.GetEntities<Customer>()
+        return GetCustomersWithOrdersFilteredBy(x => true);
+    }
+
+    private CustomerData[] GetCustomersWithOrdersFilteredBy(Expression<Func<Customer, bool>> filter)
+    {
+        var q = repository.GetEntities<Customer>()
             .Where(c => c.SalesOrderHeaders != null && c.SalesOrderHeaders.Any())
+            .Where(filter)
             .OrderBy(c => c.CompanyName)
             .Select(c => new CustomerData
             {
@@ -20,6 +28,28 @@ class CustomerService(IRepository repository) : ICustomerService
                 SalesPerson = c.SalesPerson
             });
 
-        return query.ToArray();
+        return q.ToArray();
+    }
+
+    public CustomerData[] GetCustomersWithOrdersStartingWith(string prefix)
+    {
+        Expression<Func<Customer, bool>> filter;
+        if (string.IsNullOrEmpty(prefix))
+            filter = x => true;
+        else
+            filter = c => c.CompanyName != null && c.CompanyName.StartsWith(prefix);
+
+        return GetCustomersWithOrdersFilteredBy(filter);
+    }
+
+    public CustomerData[] GetCustomersWithOrdersContaining(string fragment)
+    {
+        Expression<Func<Customer, bool>> filter;
+        if (string.IsNullOrEmpty(fragment))
+            filter = x => true;
+        else
+            filter = c => c.CompanyName != null && c.CompanyName.Contains(fragment);
+
+        return GetCustomersWithOrdersFilteredBy(filter);
     }
 }
