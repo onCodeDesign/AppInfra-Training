@@ -12,15 +12,24 @@ class SalesOrderValidationInterceptor : IEntityInterceptor<SalesOrderHeader>
         if (IsAddedOrModified(entry))
         {
             var order = entry.Entity;
-
             if (string.IsNullOrEmpty(order.AccountNumber))
                 throw new InvalidOrderException();
 
-            decimal taxes = order.TaxAmt;
-            decimal total = order.SalesOrderDetails.Sum(ol => ol.LineTotal);
+            HashSet<string> modifiedNames = entry
+                .GetProperties()
+                .Where(n => entry.Property(n).IsModified)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            if (taxes > total)
-                throw new InvalidOrderException();
+            if (modifiedNames.Overlaps(new[] {
+                    nameof(SalesOrderHeader.TaxAmt),
+                    nameof(SalesOrderHeader.SubTotal),
+                    nameof(SalesOrderHeader.Freight),
+                    nameof(SalesOrderHeader.TotalDue)
+                }))
+            {
+                if (order.TaxAmt < order.SubTotal + order.TaxAmt + order.Freight)
+                    throw new InvalidOrderException();
+            }
         }
     }
 
