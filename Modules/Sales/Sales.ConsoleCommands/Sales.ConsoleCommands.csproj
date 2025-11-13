@@ -9,5 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Modules\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\..\..\Infra\AppBoot\AppBoot.csproj" />
+    <ProjectReference Include="..\Sales.DataModel\Sales.DataModel.csproj" />
   </ItemGroup>
 </Project>

@@ -27,12 +27,20 @@ public class NotificationService(IServiceProvider serviceProvider) : INotificati
 
     public void NotifyDeleted<T>(T item)
     {
-        throw new System.NotImplementedException();
+        var subscribers = serviceProvider.GetServices<IStateChangeSubscriber<T>>();
+        foreach (var subscriber in subscribers)
+        {
+            subscriber.NotifyDeleted(item);
+        }
     }
 
     public void NotifyChanged<T>(T item)
     {
-        throw new System.NotImplementedException();
+        var subscribers = serviceProvider.GetServices<IStateChangeSubscriber<T>>();
+        foreach (var subscriber in subscribers)
+        {
+            subscriber.NotifyChanged(item);
+        }
     }
 
     public void NotifyStatusChange<T>(T item, Status newStatus, Status oldStatus)
