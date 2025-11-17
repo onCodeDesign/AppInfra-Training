@@ -18,7 +18,8 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 		                                 || assembly.StartsWith("DataAccess")
 		                                 || assembly.StartsWith("Export.")
 		                                 || assembly.StartsWith("Notifications.")
-		                                 || assembly.StartsWith("Sales.");
+		                                 || assembly.StartsWith("Sales.")
+		                                 || assembly.StartsWith("ProductsManagement.");
 
 		options.PluginPathBuilderOption = PluginPathBuilderOption.BreadcrumbNameConvention;
 		options.BreadcrumbNameConventionPathBuilderPluginsDir = "Modules";
@@ -27,6 +28,7 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 			.AddPlugin("Notifications.Services")
 			.AddPlugin("Sales.Services", "Sales.DbContext", "Sales.ConsoleCommands")
 			.AddPlugin("Export.Services")
+			.AddPlugin("ProductsManagement.Services", "ProductsManagement.ConsoleCommands")
 			;
 
 	})
