@@ -28,7 +28,7 @@ var host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 			.AddPlugin("Notifications.Services")
 			.AddPlugin("Sales.Services", "Sales.DbContext", "Sales.ConsoleCommands")
 			.AddPlugin("Export.Services")
-			.AddPlugin("ProductsManagement.Services", "ProductsManagement.ConsoleCommands")
+			.AddPlugin("ProductsManagement.Services", "ProductsManagement.ConsoleCommands", "ProductsManagement.DbContext")
 			;
 
 	})
