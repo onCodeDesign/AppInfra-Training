@@ -10,6 +10,7 @@ using AppBoot.SystemEx.Priority;
 
 namespace ConsoleUi;
 
+[Priority(Priorities.VeryLow)]
 [Service(typeof(IModule))]
 internal sealed class ConsoleUiModule(IConsole console, IEnumerable<IConsoleCommand> commands) : IModule
 {
