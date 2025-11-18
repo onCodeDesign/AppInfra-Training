@@ -45,16 +45,6 @@ public class PersonBuilder : IEntityTypeConfiguration<Person>
         entity.Property(e => e.CompanyName)
             .HasMaxLength(128);
 
-        entity.Property(e => e.PasswordHash)
-            .IsRequired()
-            .HasMaxLength(128)
-            .IsUnicode(false);
-
-        entity.Property(e => e.PasswordSalt)
-            .IsRequired()
-            .HasMaxLength(10)
-            .IsUnicode(false);
-
         entity.Property(e => e.Rowguid)
             .HasColumnName("rowguid")
             .HasDefaultValueSql("newid()")

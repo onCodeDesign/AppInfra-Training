@@ -1,10 +1,6 @@
-using System.CodeDom.Compiler;
+namespace Contracts.PersonsManagement;
 
-namespace PersonsManagement.DataModel.Persons;
-
-[GeneratedCode("Manual", "1.0.0.0")]
-[Serializable]
-public partial class Person
+public class PersonData
 {
     public int PersonID { get; set; }
     public bool NameStyle { get; set; }
@@ -16,10 +12,5 @@ public partial class Person
     public string? EmailAddress { get; set; }
     public string? Phone { get; set; }
     public string? CompanyName { get; set; }
-    public Guid Rowguid { get; set; }
     public DateTime ModifiedDate { get; set; }
-
-    public Person()
-    {
-    }
 }

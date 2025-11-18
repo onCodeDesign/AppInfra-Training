@@ -76,10 +76,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PersonsManagement", "PersonsManagement", "{7345D7EF-E4F8-45A0-85AC-E0099B1C1E00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonsManagement.Services", "Modules\PersonsManagement\PersonsManagement.Services\PersonsManagement.Services.csproj", "{8B7674B2-8E1E-1179-9EA1-B37CDB1B0CCF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{03CC54E0-D276-5C7F-3A4F-C1E4774712C8} = {03CC54E0-D276-5C7F-3A4F-C1E4774712C8}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonsManagement.DbContext", "Modules\PersonsManagement\PersonsManagement.DbContext\PersonsManagement.DbContext.csproj", "{03CC54E0-D276-5C7F-3A4F-C1E4774712C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonsManagement.DataModel", "Modules\PersonsManagement\PersonsManagement.DataModel\PersonsManagement.DataModel.csproj", "{C8819CD8-47C8-707B-1EAF-6B7E55451C08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonsManagement.ConsoleCommands", "Modules\PersonsManagement\PersonsManagement.ConsoleCommands\PersonsManagement.ConsoleCommands.csproj", "{EA568308-EFF1-BB6F-8BA8-0DFE8AB9F45D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +168,10 @@ Global
 		{C8819CD8-47C8-707B-1EAF-6B7E55451C08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8819CD8-47C8-707B-1EAF-6B7E55451C08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8819CD8-47C8-707B-1EAF-6B7E55451C08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA568308-EFF1-BB6F-8BA8-0DFE8AB9F45D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA568308-EFF1-BB6F-8BA8-0DFE8AB9F45D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA568308-EFF1-BB6F-8BA8-0DFE8AB9F45D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA568308-EFF1-BB6F-8BA8-0DFE8AB9F45D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,6 +201,7 @@ Global
 		{8B7674B2-8E1E-1179-9EA1-B37CDB1B0CCF} = {7345D7EF-E4F8-45A0-85AC-E0099B1C1E00}
 		{03CC54E0-D276-5C7F-3A4F-C1E4774712C8} = {7345D7EF-E4F8-45A0-85AC-E0099B1C1E00}
 		{C8819CD8-47C8-707B-1EAF-6B7E55451C08} = {7345D7EF-E4F8-45A0-85AC-E0099B1C1E00}
+		{EA568308-EFF1-BB6F-8BA8-0DFE8AB9F45D} = {7345D7EF-E4F8-45A0-85AC-E0099B1C1E00}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {810358C4-4439-45AB-AD48-BAFE6A6D611D}
