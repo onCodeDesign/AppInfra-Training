@@ -31,4 +31,28 @@ internal class PersonService(IRepository repository) : IPersonService
             return person.PersonID;
         }
     }
+
+    public PersonData[] GetAllPersons()
+    {
+        var persons = repository.GetEntities<Person>()
+            .OrderBy(p => p.LastName)
+            .ThenBy(p => p.FirstName)
+            .Select(p => new PersonData
+            {
+                PersonID = p.PersonID,
+                NameStyle = p.NameStyle,
+                Title = p.Title,
+                FirstName = p.FirstName,
+                MiddleName = p.MiddleName,
+                LastName = p.LastName,
+                Suffix = p.Suffix,
+                EmailAddress = p.EmailAddress,
+                Phone = p.Phone,
+                CompanyName = p.CompanyName,
+                ModifiedDate = p.ModifiedDate
+            })
+            .ToArray();
+
+        return persons;
+    }
 }
