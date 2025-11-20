@@ -683,6 +683,59 @@ ul.plugin-contextmenu {
     <script type="text/javascript" src="./DOMPurify/purify.min.js" id="DomPurifyTag" class="selectNone"></script>
     <script type="text/javascript" src="./daytonaHtmlContextMenu.js" id="HTMLContextMenuScript" class="selectNone"></script>
     <script type="text/javascript" src="./mermaidJS/mermaid.min.js" class="selectNone"></script>
+    <script type="text/javascript" src="./mermaidScripting/mermaidZoomControls.js" class="selectNone"></script>
+    <script type="text/javascript" src="./mermaidScripting/mermaidRenderer.js" class="selectNone"></script>
+    <!-- Whenever we have a single mermaid diagram on the page, the diagram gets centered on the page, and we enable zoom controls and panning capabilities.
+         If the contents are not just a single mermaid diagram, we dynamically disable this styling.
+         (see ToggleMermaidSingletonStyling in WebViewHost.cs) -->
+    <style id="mermaid-singleton-style" class="selectNone">
+        /* Max-out the dimensions of the document so that the mermaid diagram can be zoomed and panned around the entirety of the preview's screenspace*/
+        html, body {
+            height: 100%; /* By default, the height doesn't take up 100% of the available height */
+            overflow: hidden; /* Don't show scrollbar */
+        }
+
+        #___markdown-content___ {
+            height: 100%;
+        }
+
+        /* The mermaid diagram and zoom controls are wrapped inside a "zoomwrapper" div */
+        #mermaid-diagram-zoomwrapper {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            cursor: grab;
+            user-select: none;
+        }
+
+        #mermaid-diagram-zoomcontrols {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+            /* Zoom-control buttons*/
+            #mermaid-diagram-zoomcontrols button {
+                background: rgba(255, 255, 255, 0.7);
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+                cursor: pointer;
+                padding: 4px; /* 4px on all sides */
+                text-align: center;
+                min-width: 30px;
+            }
+
+        #mermaid-diagram-zoomwrapper:hover #mermaid-diagram-zoomcontrols {
+            opacity: 0.8;
+        }
+    </style>
+    <!-- Default styling -->
     <style class="selectNone">
         html, body {
         }
@@ -691,7 +744,7 @@ ul.plugin-contextmenu {
     <meta http-equiv="cache-control" content="no-cache" class="selectNone">
 <base href="file://C:/D/Work/Training/OOD/AppInfra-repo/.Practice/readme.md"><base><base><base><base></head>
 <body class="selectNone">
-    <div id="___markdown-content___" class="selectNone" data-plugin-contextmenu="plugin-contextmenu-c838210c-bd3d-7bb9-53be-34a22afb1b39"><h1 id="this-file-contains-exercises-based-on-the-appinfra-demo"><a id="pragma-line-0"></a>This file contains exercises based on the AppInfra demo</h1>
+    <div id="___markdown-content___" class="selectNone" data-plugin-contextmenu="plugin-contextmenu-e5857d27-5f08-b62b-640e-8449f0691a84"><h1 id="this-file-contains-exercises-based-on-the-appinfra-demo"><a id="pragma-line-0"></a>This file contains exercises based on the AppInfra demo</h1>
 <h2 id="notifications-module"><a id="pragma-line-2"></a>0. Notifications Module</h2>
 <blockquote id="pragma-line-4">
 <p id="pragma-line-4"><strong>Objective:</strong> Get familiar with the DemoApp, and understand how the Bootstrapper, Application Initialization, Dependency Injection, and Service Locator work.</p>
@@ -980,48 +1033,60 @@ interface IEntityFieldsReader&lt;T&gt;
 <blockquote id="pragma-line-300">
 <p id="pragma-line-300"><strong>Observation:</strong><br>
 Notice how the interceptors created in exercises 5 and 6 are automatically triggered when a new <code>ProductCategory</code> is added.</p>
+<ul id="pragma-line-302">
+<li id="pragma-line-302">Is the <code>NotificationService</code> called? Why?</li>
+<li id="pragma-line-303">Is the <code>ModifiedDate</code> set? Why?
+<ul id="pragma-line-304">
+<li id="pragma-line-304">Discuss the options of coupling the modules through shared entity interfaces (e.g. <code>IAuditable</code>) VS module-specific entity interfaces (e.g. <code>IAuditable</code>) (Coupling vs Duplication)</li>
+</ul>
+</li>
+</ul>
 </blockquote>
-<hr id="pragma-line-303">
-<h2 id="persons-managemnt-module"><a id="pragma-line-305"></a>8. Persons Managemnt Module</h2>
-<h3 id="add-a-new-module-personsmanagementmodule"><a id="pragma-line-307"></a>8.0 Add a new Module <code>PersonsManagementModule</code></h3>
-<blockquote id="pragma-line-309">
-<p id="pragma-line-309">!Objectives:</p>
-<ol id="pragma-line-310">
-<li id="pragma-line-310">Understand how to add new modules to this Application Infrastructure</li>
+<hr id="pragma-line-306">
+<h2 id="persons-management-module"><a id="pragma-line-308"></a>8. Persons Management Module</h2>
+<hr id="pragma-line-310">
+<h3 id="add-a-new-module-personsmanagement"><a id="pragma-line-312"></a>8.0 Add a new module: <code>PersonsManagement</code></h3>
+<blockquote id="pragma-line-314">
+<p id="pragma-line-314"><strong>Objectives:</strong></p>
+<ol id="pragma-line-315">
+<li id="pragma-line-315">Understand how to add new modules to the Application Infrastructure.</li>
+<li id="pragma-line-316">Add new tables to the database.</li>
+<li id="pragma-line-317">Use services from one module within another.</li>
 </ol>
 </blockquote>
-<ol id="pragma-line-311">
-<li id="pragma-line-311">Add new table to the database</li>
-<li id="pragma-line-312">Use services from one module into other</li>
-</ol>
-<ul id="pragma-line-314">
-<li id="pragma-line-314">Create a new module <code>PersonsManagementModule</code> in the <code>Modules\PersonsManagement</code> folder</li>
-<li id="pragma-line-315">Create a new project <code>PersonsManagement.Services</code> in this folder</li>
-<li id="pragma-line-316">Create the <code>PersonsManagementModule : IModule</code> class that notifies when it is alive</li>
-<li id="pragma-line-317">Add the <code>PersonsManagement.Services</code> as a plugin in the AppBoot</li>
-<li id="pragma-line-318">Create a new Schema (<code>Persons</code>) in the <code>AdventureWorks</code> database to host the new <code>Person</code> table
-<ul id="pragma-line-319">
-<li id="pragma-line-319">Create a new table <code>Person</code> in the <code>Persons</code> schema with the columns similar to the <code>Customer</code> table</li>
+<p id="pragma-line-319">Step a) Create the database schema and table</p>
+<ul id="pragma-line-320">
+<li id="pragma-line-320">In the <code>AdventureWorksLT</code> database, run the <code>.Practice/Lab8-CreatePersonsSchema.sql</code> script to:</li>
+<li id="pragma-line-321">Create a new schema <code>Persons</code> to host the new <code>Person</code> table.</li>
+<li id="pragma-line-322">Create a new table <code>Person</code> in the <code>Persons</code> schema, with columns similar to those in the <code>Customer</code> table.</li>
+</ul>
+<p id="pragma-line-324">Step b) Create the module and projects</p>
+<ul id="pragma-line-325">
+<li id="pragma-line-325">Create a new module <code>PersonsManagement</code> in the <code>Modules\PersonsManagement</code> folder.</li>
+<li id="pragma-line-326">Create a new project <code>PersonsManagement.Services</code> in this folder.</li>
+<li id="pragma-line-327">Implement the class <code>PersonsManagementModule : IModule</code> that sends a notification when it becomes active.</li>
+<li id="pragma-line-328">Add <code>PersonsManagement.Services</code> as a plugin in the AppBoot setup.</li>
+</ul>
+<p id="pragma-line-330">Step c) Create the DataModel and DbContext projects</p>
+<ul id="pragma-line-331">
+<li id="pragma-line-331">Create the <code>Persons.DataModel</code> project under the <code>Modules\PersonsManagement</code> folder.
+<ul id="pragma-line-332">
+<li id="pragma-line-332">Map the <code>Person</code> table to an entity.</li>
 </ul>
 </li>
-<li id="pragma-line-320">Create the <code>Persons.DataModel</code> project in the <code>Modules\PersonsManagement</code> folder
-<ul id="pragma-line-321">
-<li id="pragma-line-321">Map the <code>Person</code> table to an entity</li>
-</ul>
-</li>
-<li id="pragma-line-322">Create the <code>Persons.DbContext</code> project in the <code>Modules\PersonsManagement</code> folder
-<ul id="pragma-line-323">
-<li id="pragma-line-323">Implement the <code>IDbContextFactory</code> to provide the <code>DbContext</code> for the <code>Persons.DataModel</code></li>
+<li id="pragma-line-333">Create the <code>Persons.DbContext</code> project in the same folder.
+<ul id="pragma-line-334">
+<li id="pragma-line-334">Implement <code>IDbContextFactory</code> to provide the <code>DbContext</code> for the <code>Persons.DataModel</code>.</li>
 </ul>
 </li>
 </ul>
-<h3 id="add-a-new-person"><a id="pragma-line-325"></a>8.1. Add a new <code>Person</code></h3>
-<blockquote id="pragma-line-327">
-<p id="pragma-line-327">!Objective: See how existent Application Infrastructure capabilities are used by new features of new Modules</p>
+<hr id="pragma-line-336">
+<h3 id="add-a-new-person"><a id="pragma-line-338"></a>8.1 Add a new <code>Person</code></h3>
+<blockquote id="pragma-line-340">
+<p id="pragma-line-340"><strong>Objective:</strong> Understand how existing Application Infrastructure capabilities can be reused by new modules.</p>
 </blockquote>
-<h3 id="create-support-to-read-a-entity-from-the-console"><a id="pragma-line-329"></a>7.1.1. Create support to read a entity from the console</h3>
-<p id="pragma-line-331">Use the following interfaces:</p>
-<pre><code id="pragma-line-333">interface IEntityReader
+<p id="pragma-line-342">Step a) Use the following interfaces:</p>
+<pre><code class="language-csharp" id="pragma-line-344">interface IEntityReader
 {
     IEntityFieldsReader&lt;T&gt; BeginEntityRead&lt;T&gt;();
 }
@@ -1033,24 +1098,45 @@ interface IEntityFieldsReader&lt;T&gt;
     T GetEntity();
 }
 </code></pre>
-<p id="pragma-line-347">Read the data needed to create a <code>Person</code> entity</p>
-<h3 id="create-a-service-that-adds-a-new-person-to-the-system"><a id="pragma-line-349"></a>8.1.2. Create a service that adds a new <code>Person</code> to the system</h3>
-<p id="pragma-line-351">The above console command which reads the product category info should use this service to add the new read product category.</p>
-<blockquote id="pragma-line-353">
-<p id="pragma-line-353">!Observe: how the interceptors created in ex. 5 &amp; 6 are working when a new ProductCategory is added</p>
+<ul id="pragma-line-358">
+<li id="pragma-line-358">Use these interfaces to read the data required to create a new <code>Person</code> entity from the console input.</li>
+<li id="pragma-line-359">The interfaces should already be available in the <code>Contracts</code> project, as defined in exercise 7.</li>
+</ul>
+<hr id="pragma-line-361">
+<p id="pragma-line-363">Step b) Create a service that adds a new <code>Person</code> to the system</p>
+<ul id="pragma-line-365">
+<li id="pragma-line-365">Add a service in the <code>PersonsManagement</code> module that inserts a new <code>Person</code> into the database.
+<ul id="pragma-line-366">
+<li id="pragma-line-366">The service should use the <code>IUnitOfWork</code> from the <code>DataAccess</code> layer.</li>
+</ul>
+</li>
+<li id="pragma-line-367">The console command that reads <code>Person</code> data should now use this service to persist the new entity.</li>
+</ul>
+<blockquote id="pragma-line-369">
+<p id="pragma-line-369"><strong>Observation:</strong><br>
+Notice how the interceptors created in exercises 5 and 6 are automatically triggered when a new <code>Person</code> is added.</p>
+<ul id="pragma-line-371">
+<li id="pragma-line-371">Is the <code>NotificationService</code> called? Why?</li>
+<li id="pragma-line-372">Is the <code>ModifiedDate</code> set? Why?
+<ul id="pragma-line-373">
+<li id="pragma-line-373">Discuss the options of coupling the modules through shared entity interfaces (e.g. <code>IAuditable</code>) VS module-specific entity interfaces (e.g. <code>IAuditable</code>) (Coupling vs Duplication)</li>
+</ul>
+</li>
+</ul>
 </blockquote>
-<h3 id="import-persons-as-new-customers"><a id="pragma-line-355"></a>8.1.3. Import persons as new customers</h3>
-<blockquote id="pragma-line-357">
-<p id="pragma-line-357">!Objective: Use one service from a module into another module</p>
+<hr id="pragma-line-375">
+<h3 id="import-persons-as-new-customers"><a id="pragma-line-377"></a>8.2. Import persons as new customers</h3>
+<blockquote id="pragma-line-379">
+<p id="pragma-line-379"><strong>Objective:</strong> Use a service from one module within another module.</p>
 </blockquote>
-<ul id="pragma-line-359">
-<li id="pragma-line-359">Create a service in the <code>PersonsManagementModule</code> that gives all persons</li>
-<li id="pragma-line-360">Create a service in the <code>SalesModule</code> that imports all persons as new customers
-<ul id="pragma-line-361">
-<li id="pragma-line-361">Decide upon a key / Modified data or other criteria to know which persons should be imported as new customers and were not yet imported</li>
+<ul id="pragma-line-381">
+<li id="pragma-line-381">Create a service in the <code>PersonsManagement</code> module that retrieves all persons.</li>
+<li id="pragma-line-382">Create a service in the <code>Sales</code> module that imports persons as new customers.
+<ul id="pragma-line-383">
+<li id="pragma-line-383">Decide on a key, modified date, or another criterion to identify which persons should be imported as customers and which have already been imported.</li>
 </ul>
 </li>
 </ul>
 </div>
 
-<div id="plugin-contextmenu-container" class="selectNone"><ul id="plugin-contextmenu-c838210c-bd3d-7bb9-53be-34a22afb1b39" class="plugin-contextmenu" data-plugin-is-contextmenu="true" style="display: none;"><li class="menuitem disabled" tabindex="1" role="menuitem" id="Copy" data-plugin-contextmenu-item-type="command" aria-disabled="true"><img class="icon" style="visibility: hidden;"><div class="main">Copy</div></li><li class="menuitem" tabindex="2" role="menuitem" id="Save" data-plugin-contextmenu-item-type="command"><img class="icon" style="visibility: hidden;"><div class="main">Save As HTML... </div></li><li class="menuitem" tabindex="3" role="menuitem" id="Print" data-plugin-contextmenu-item-type="command"><img class="icon" style="visibility: hidden;"><div class="main">Print HTML...</div></li></ul></div></body>
+<div id="plugin-contextmenu-container" class="selectNone"><ul id="plugin-contextmenu-e5857d27-5f08-b62b-640e-8449f0691a84" class="plugin-contextmenu" data-plugin-is-contextmenu="true" style="display: none;"><li class="menuitem disabled" tabindex="1" role="menuitem" id="Copy" data-plugin-contextmenu-item-type="command" aria-disabled="true"><img class="icon" style="visibility: hidden;"><div class="main">Copy</div></li><li class="menuitem" tabindex="2" role="menuitem" id="Save" data-plugin-contextmenu-item-type="command"><img class="icon" style="visibility: hidden;"><div class="main">Save As HTML... </div></li><li class="menuitem" tabindex="3" role="menuitem" id="Print" data-plugin-contextmenu-item-type="command"><img class="icon" style="visibility: hidden;"><div class="main">Print HTML...</div></li></ul></div></body>

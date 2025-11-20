@@ -300,38 +300,49 @@ interface IEntityFieldsReader<T>
 
 > **Observation:**  
 > Notice how the interceptors created in exercises 5 and 6 are automatically triggered when a new `ProductCategory` is added.
+> - Is the `NotificationService` called? Why?
+> - Is the `ModifiedDate` set? Why?
+>     - Discuss the options of coupling the modules through shared entity interfaces (e.g. `IAuditable`) VS module-specific entity interfaces (e.g. `IAuditable`) (Coupling vs Duplication)
 
 --------
 
-## 8. Persons Managemnt Module
+## 8. Persons Management Module
 
-### 8.0 Add a new Module `PersonsManagementModule`
+---
 
-> !Objectives: 
-> 1. Understand how to add new modules to this Application Infrastructure
-  1. Add new table to the database
-  1. Use services from one module into other
+### 8.0 Add a new module: `PersonsManagement`
 
-- Create a new module `PersonsManagementModule` in the `Modules\PersonsManagement` folder
- - Create a new project `PersonsManagement.Services` in this folder
- - Create the `PersonsManagementModule : IModule` class that notifies when it is alive
- - Add the `PersonsManagement.Services` as a plugin in the AppBoot
- - Create a new Schema (`Persons`) in the `AdventureWorks` database to host the new `Person` table
-    - Create a new table `Person` in the `Persons` schema with the columns similar to the `Customer` table        
- - Create the `Persons.DataModel` project in the `Modules\PersonsManagement` folder
-    - Map the `Person` table to an entity
- - Create the `Persons.DbContext` project in the `Modules\PersonsManagement` folder
-    - Implement the `IDbContextFactory` to provide the `DbContext` for the `Persons.DataModel`
+> **Objectives:**  
+> 1. Understand how to add new modules to the Application Infrastructure.  
+> 2. Add new tables to the database.  
+> 3. Use services from one module within another.
 
-### 8.1. Add a new `Person`
+Step a) Create the database schema and table
+ - In the `AdventureWorksLT` database, run the `.Practice/Lab8-CreatePersonsSchema.sql` script to:
+  - Create a new schema `Persons` to host the new `Person` table.  
+  - Create a new table `Person` in the `Persons` schema, with columns similar to those in the `Customer` table.  
 
-> !Objective: See how existent Application Infrastructure capabilities are used by new features of new Modules
+Step b) Create the module and projects
+- Create a new module `PersonsManagement` in the `Modules\PersonsManagement` folder.  
+- Create a new project `PersonsManagement.Services` in this folder.  
+- Implement the class `PersonsManagementModule : IModule` that sends a notification when it becomes active.  
+- Add `PersonsManagement.Services` as a plugin in the AppBoot setup.  
 
-### 7.1.1. Create support to read a entity from the console
+Step c) Create the DataModel and DbContext projects
+- Create the `Persons.DataModel` project under the `Modules\PersonsManagement` folder.  
+  - Map the `Person` table to an entity.  
+- Create the `Persons.DbContext` project in the same folder.  
+  - Implement `IDbContextFactory` to provide the `DbContext` for the `Persons.DataModel`.
 
-Use the following interfaces:
+---
 
-```
+### 8.1 Add a new `Person`
+
+> **Objective:** Understand how existing Application Infrastructure capabilities can be reused by new modules.
+
+Step a) Use the following interfaces:
+
+```csharp
 interface IEntityReader
 {
     IEntityFieldsReader<T> BeginEntityRead<T>();
@@ -345,18 +356,29 @@ interface IEntityFieldsReader<T>
 }
 ```
 
-Read the data needed to create a `Person` entity
+- Use these interfaces to read the data required to create a new `Person` entity from the console input.  
+- The interfaces should already be available in the `Contracts` project, as defined in exercise 7.
 
-### 8.1.2. Create a service that adds a new `Person` to the system
+---
 
-The above console command which reads the product category info should use this service to add the new read product category.
+Step b) Create a service that adds a new `Person` to the system
 
-> !Observe: how the interceptors created in ex. 5 & 6 are working when a new ProductCategory is added
+- Add a service in the `PersonsManagement` module that inserts a new `Person` into the database.  
+  - The service should use the `IUnitOfWork` from the `DataAccess` layer.  
+- The console command that reads `Person` data should now use this service to persist the new entity.
 
-### 8.1.3. Import persons as new customers
+> **Observation:**  
+> Notice how the interceptors created in exercises 5 and 6 are automatically triggered when a new `Person` is added.
+> - Is the `NotificationService` called? Why?
+> - Is the `ModifiedDate` set? Why?
+>     - Discuss the options of coupling the modules through shared entity interfaces (e.g. `IAuditable`) VS module-specific entity interfaces (e.g. `IAuditable`) (Coupling vs Duplication)
 
-> !Objective: Use one service from a module into another module
- 
- - Create a service in the `PersonsManagementModule` that gives all persons
- - Create a service in the `SalesModule` that imports all persons as new customers
-    -  Decide upon a key / Modified data or other criteria to know which persons should be imported as new customers and were not yet imported
+---
+
+### 8.2. Import persons as new customers
+
+> **Objective:** Use a service from one module within another module.
+
+- Create a service in the `PersonsManagement` module that retrieves all persons.  
+- Create a service in the `Sales` module that imports persons as new customers.  
+  - Decide on a key, modified date, or another criterion to identify which persons should be imported as customers and which have already been imported.
